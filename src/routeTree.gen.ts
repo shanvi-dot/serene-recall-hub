@@ -12,8 +12,11 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ProgressRouteImport } from './routes/progress'
+import { Route as RemindersRouteImport } from './routes/reminders'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as GamesIndexRouteImport } from './routes/games/index'
+import { Route as GamesMemoryRouteImport } from './routes/games/memory'
+import { Route as GamesSequenceRouteImport } from './routes/games/sequence'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -30,6 +33,11 @@ const ProgressRoute = ProgressRouteImport.update({
   path: '/progress',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RemindersRoute = RemindersRouteImport.update({
+  id: '/reminders',
+  path: '/reminders',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
@@ -40,19 +48,35 @@ const GamesIndexRoute = GamesIndexRouteImport.update({
   path: '/games/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GamesMemoryRoute = GamesMemoryRouteImport.update({
+  id: '/games/memory',
+  path: '/games/memory',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GamesSequenceRoute = GamesSequenceRouteImport.update({
+  id: '/games/sequence',
+  path: '/games/sequence',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/progress': typeof ProgressRoute
+  '/reminders': typeof RemindersRoute
   '/signup': typeof SignupRoute
+  '/games/memory': typeof GamesMemoryRoute
+  '/games/sequence': typeof GamesSequenceRoute
   '/games/': typeof GamesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/progress': typeof ProgressRoute
+  '/reminders': typeof RemindersRoute
   '/signup': typeof SignupRoute
+  '/games/memory': typeof GamesMemoryRoute
+  '/games/sequence': typeof GamesSequenceRoute
   '/games': typeof GamesIndexRoute
 }
 export interface FileRoutesById {
@@ -60,22 +84,53 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/progress': typeof ProgressRoute
+  '/reminders': typeof RemindersRoute
   '/signup': typeof SignupRoute
+  '/games/memory': typeof GamesMemoryRoute
+  '/games/sequence': typeof GamesSequenceRoute
   '/games/': typeof GamesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/progress' | '/signup' | '/games/'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/progress'
+    | '/reminders'
+    | '/signup'
+    | '/games/memory'
+    | '/games/sequence'
+    | '/games/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/progress' | '/signup' | '/games'
-  id: '__root__' | '/' | '/dashboard' | '/progress' | '/signup' | '/games/'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/progress'
+    | '/reminders'
+    | '/signup'
+    | '/games/memory'
+    | '/games/sequence'
+    | '/games'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/progress'
+    | '/reminders'
+    | '/signup'
+    | '/games/memory'
+    | '/games/sequence'
+    | '/games/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
   ProgressRoute: typeof ProgressRoute
+  RemindersRoute: typeof RemindersRoute
   SignupRoute: typeof SignupRoute
+  GamesMemoryRoute: typeof GamesMemoryRoute
+  GamesSequenceRoute: typeof GamesSequenceRoute
   GamesIndexRoute: typeof GamesIndexRoute
 }
 
@@ -102,6 +157,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProgressRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reminders': {
+      id: '/reminders'
+      path: '/reminders'
+      fullPath: '/reminders'
+      preLoaderRoute: typeof RemindersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/signup': {
       id: '/signup'
       path: '/signup'
@@ -116,6 +178,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GamesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/games/memory': {
+      id: '/games/memory'
+      path: '/games/memory'
+      fullPath: '/games/memory'
+      preLoaderRoute: typeof GamesMemoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/games/sequence': {
+      id: '/games/sequence'
+      path: '/games/sequence'
+      fullPath: '/games/sequence'
+      preLoaderRoute: typeof GamesSequenceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -123,7 +199,10 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
   ProgressRoute: ProgressRoute,
+  RemindersRoute: RemindersRoute,
   SignupRoute: SignupRoute,
+  GamesMemoryRoute: GamesMemoryRoute,
+  GamesSequenceRoute: GamesSequenceRoute,
   GamesIndexRoute: GamesIndexRoute,
 }
 export const routeTree = rootRouteImport
