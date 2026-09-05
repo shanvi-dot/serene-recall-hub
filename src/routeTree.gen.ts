@@ -10,22 +10,37 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CaregiverRouteImport } from './routes/caregiver'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ProgressRouteImport } from './routes/progress'
 import { Route as RemindersRouteImport } from './routes/reminders'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as GamesIndexRouteImport } from './routes/games/index'
 import { Route as GamesMemoryRouteImport } from './routes/games/memory'
 import { Route as GamesSequenceRouteImport } from './routes/games/sequence'
+import { Route as JournalIndexRouteImport } from './routes/journal/index'
+import { Route as JournalIdRouteImport } from './routes/journal/$id'
+import { Route as JournalNewRouteImport } from './routes/journal/new'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CaregiverRoute = CaregiverRouteImport.update({
+  id: '/caregiver',
+  path: '/caregiver',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProgressRoute = ProgressRouteImport.update({
@@ -58,80 +73,130 @@ const GamesSequenceRoute = GamesSequenceRouteImport.update({
   path: '/games/sequence',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JournalIndexRoute = JournalIndexRouteImport.update({
+  id: '/journal/',
+  path: '/journal/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JournalIdRoute = JournalIdRouteImport.update({
+  id: '/journal/$id',
+  path: '/journal/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JournalNewRoute = JournalNewRouteImport.update({
+  id: '/journal/new',
+  path: '/journal/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/caregiver': typeof CaregiverRoute
   '/dashboard': typeof DashboardRoute
+  '/profile': typeof ProfileRoute
   '/progress': typeof ProgressRoute
   '/reminders': typeof RemindersRoute
   '/signup': typeof SignupRoute
   '/games/memory': typeof GamesMemoryRoute
   '/games/sequence': typeof GamesSequenceRoute
+  '/journal/$id': typeof JournalIdRoute
+  '/journal/new': typeof JournalNewRoute
   '/games/': typeof GamesIndexRoute
+  '/journal/': typeof JournalIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/caregiver': typeof CaregiverRoute
   '/dashboard': typeof DashboardRoute
+  '/profile': typeof ProfileRoute
   '/progress': typeof ProgressRoute
   '/reminders': typeof RemindersRoute
   '/signup': typeof SignupRoute
   '/games/memory': typeof GamesMemoryRoute
   '/games/sequence': typeof GamesSequenceRoute
+  '/journal/$id': typeof JournalIdRoute
+  '/journal/new': typeof JournalNewRoute
   '/games': typeof GamesIndexRoute
+  '/journal': typeof JournalIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/caregiver': typeof CaregiverRoute
   '/dashboard': typeof DashboardRoute
+  '/profile': typeof ProfileRoute
   '/progress': typeof ProgressRoute
   '/reminders': typeof RemindersRoute
   '/signup': typeof SignupRoute
   '/games/memory': typeof GamesMemoryRoute
   '/games/sequence': typeof GamesSequenceRoute
+  '/journal/$id': typeof JournalIdRoute
+  '/journal/new': typeof JournalNewRoute
   '/games/': typeof GamesIndexRoute
+  '/journal/': typeof JournalIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/caregiver'
     | '/dashboard'
+    | '/profile'
     | '/progress'
     | '/reminders'
     | '/signup'
     | '/games/memory'
     | '/games/sequence'
+    | '/journal/$id'
+    | '/journal/new'
     | '/games/'
+    | '/journal/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/caregiver'
     | '/dashboard'
+    | '/profile'
     | '/progress'
     | '/reminders'
     | '/signup'
     | '/games/memory'
     | '/games/sequence'
+    | '/journal/$id'
+    | '/journal/new'
     | '/games'
+    | '/journal'
   id:
     | '__root__'
     | '/'
+    | '/caregiver'
     | '/dashboard'
+    | '/profile'
     | '/progress'
     | '/reminders'
     | '/signup'
     | '/games/memory'
     | '/games/sequence'
+    | '/journal/$id'
+    | '/journal/new'
     | '/games/'
+    | '/journal/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CaregiverRoute: typeof CaregiverRoute
   DashboardRoute: typeof DashboardRoute
+  ProfileRoute: typeof ProfileRoute
   ProgressRoute: typeof ProgressRoute
   RemindersRoute: typeof RemindersRoute
   SignupRoute: typeof SignupRoute
   GamesMemoryRoute: typeof GamesMemoryRoute
   GamesSequenceRoute: typeof GamesSequenceRoute
+  JournalIdRoute: typeof JournalIdRoute
+  JournalNewRoute: typeof JournalNewRoute
   GamesIndexRoute: typeof GamesIndexRoute
+  JournalIndexRoute: typeof JournalIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -143,11 +208,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/caregiver': {
+      id: '/caregiver'
+      path: '/caregiver'
+      fullPath: '/caregiver'
+      preLoaderRoute: typeof CaregiverRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/progress': {
@@ -192,18 +271,44 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GamesSequenceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/journal/': {
+      id: '/journal/'
+      path: '/journal'
+      fullPath: '/journal/'
+      preLoaderRoute: typeof JournalIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/journal/$id': {
+      id: '/journal/$id'
+      path: '/journal/$id'
+      fullPath: '/journal/$id'
+      preLoaderRoute: typeof JournalIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/journal/new': {
+      id: '/journal/new'
+      path: '/journal/new'
+      fullPath: '/journal/new'
+      preLoaderRoute: typeof JournalNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CaregiverRoute: CaregiverRoute,
   DashboardRoute: DashboardRoute,
+  ProfileRoute: ProfileRoute,
   ProgressRoute: ProgressRoute,
   RemindersRoute: RemindersRoute,
   SignupRoute: SignupRoute,
   GamesMemoryRoute: GamesMemoryRoute,
   GamesSequenceRoute: GamesSequenceRoute,
+  JournalIdRoute: JournalIdRoute,
+  JournalNewRoute: JournalNewRoute,
   GamesIndexRoute: GamesIndexRoute,
+  JournalIndexRoute: JournalIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
