@@ -1,12 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { AlertTriangle, BookHeart, Bell, Plus, Smile } from "lucide-react";
+import { useEffect } from "react";
+import { useSession } from "@/lib/session";
+import { AlertTriangle, BookHeart, Bell, Plus, Smile, UserCog } from "lucide-react";
 import { MobileShell, ScreenHeader } from "@/components/mobile-shell";
 import { SoftCard, Pill } from "@/components/soft-card";
 import { Button } from "@/components/ui/button";
 import { patient, reminders, weeklyScores, moodTrend, memories } from "@/lib/care-data";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/caregiver")({
+export const Route = createFileRoute("/caregiver/")({
   head: () => ({
     meta: [
       { title: "Caregiver Dashboard — Lumen Care" },
@@ -31,6 +33,11 @@ const alerts = [
 ];
 
 function CaregiverDashboard() {
+  const { role, signIn } = useSession();
+  useEffect(() => {
+    if (role !== "caregiver") signIn("caregiver");
+  }, [role, signIn]);
+
   const done = reminders.filter((r) => r.done).length;
   const adherence = Math.round((done / reminders.length) * 100);
   const avgScore = Math.round(weeklyScores.reduce((s, d) => s + d.score, 0) / weeklyScores.length);
@@ -163,6 +170,11 @@ function CaregiverDashboard() {
           <Link to="/journal" className="block">
             <Button variant="outline" size="care" className="w-full font-bold">
               <BookHeart className="size-6" aria-hidden="true" /> View journal
+            </Button>
+          </Link>
+          <Link to="/caregiver/profile" className="block">
+            <Button variant="softOutline" size="care" className="w-full font-bold">
+              <UserCog className="size-6" aria-hidden="true" /> My caregiver profile
             </Button>
           </Link>
         </div>

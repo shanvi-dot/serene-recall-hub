@@ -10,12 +10,12 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as CaregiverRouteImport } from './routes/caregiver'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ProgressRouteImport } from './routes/progress'
 import { Route as RemindersRouteImport } from './routes/reminders'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as CaregiverIndexRouteImport } from './routes/caregiver/index'
 import { Route as GamesIndexRouteImport } from './routes/games/index'
 import { Route as GamesMemoryRouteImport } from './routes/games/memory'
 import { Route as GamesSequenceRouteImport } from './routes/games/sequence'
@@ -26,11 +26,6 @@ import { Route as JournalNewRouteImport } from './routes/journal/new'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CaregiverRoute = CaregiverRouteImport.update({
-  id: '/caregiver',
-  path: '/caregiver',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -56,6 +51,11 @@ const RemindersRoute = RemindersRouteImport.update({
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CaregiverIndexRoute = CaregiverIndexRouteImport.update({
+  id: '/caregiver/',
+  path: '/caregiver/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GamesIndexRoute = GamesIndexRouteImport.update({
@@ -91,7 +91,6 @@ const JournalNewRoute = JournalNewRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/caregiver': typeof CaregiverRoute
   '/dashboard': typeof DashboardRoute
   '/profile': typeof ProfileRoute
   '/progress': typeof ProgressRoute
@@ -101,12 +100,12 @@ export interface FileRoutesByFullPath {
   '/games/sequence': typeof GamesSequenceRoute
   '/journal/$id': typeof JournalIdRoute
   '/journal/new': typeof JournalNewRoute
+  '/caregiver/': typeof CaregiverIndexRoute
   '/games/': typeof GamesIndexRoute
   '/journal/': typeof JournalIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/caregiver': typeof CaregiverRoute
   '/dashboard': typeof DashboardRoute
   '/profile': typeof ProfileRoute
   '/progress': typeof ProgressRoute
@@ -116,13 +115,13 @@ export interface FileRoutesByTo {
   '/games/sequence': typeof GamesSequenceRoute
   '/journal/$id': typeof JournalIdRoute
   '/journal/new': typeof JournalNewRoute
+  '/caregiver': typeof CaregiverIndexRoute
   '/games': typeof GamesIndexRoute
   '/journal': typeof JournalIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/caregiver': typeof CaregiverRoute
   '/dashboard': typeof DashboardRoute
   '/profile': typeof ProfileRoute
   '/progress': typeof ProgressRoute
@@ -132,6 +131,7 @@ export interface FileRoutesById {
   '/games/sequence': typeof GamesSequenceRoute
   '/journal/$id': typeof JournalIdRoute
   '/journal/new': typeof JournalNewRoute
+  '/caregiver/': typeof CaregiverIndexRoute
   '/games/': typeof GamesIndexRoute
   '/journal/': typeof JournalIndexRoute
 }
@@ -139,7 +139,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/caregiver'
     | '/dashboard'
     | '/profile'
     | '/progress'
@@ -149,12 +148,12 @@ export interface FileRouteTypes {
     | '/games/sequence'
     | '/journal/$id'
     | '/journal/new'
+    | '/caregiver/'
     | '/games/'
     | '/journal/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/caregiver'
     | '/dashboard'
     | '/profile'
     | '/progress'
@@ -164,12 +163,12 @@ export interface FileRouteTypes {
     | '/games/sequence'
     | '/journal/$id'
     | '/journal/new'
+    | '/caregiver'
     | '/games'
     | '/journal'
   id:
     | '__root__'
     | '/'
-    | '/caregiver'
     | '/dashboard'
     | '/profile'
     | '/progress'
@@ -179,13 +178,13 @@ export interface FileRouteTypes {
     | '/games/sequence'
     | '/journal/$id'
     | '/journal/new'
+    | '/caregiver/'
     | '/games/'
     | '/journal/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  CaregiverRoute: typeof CaregiverRoute
   DashboardRoute: typeof DashboardRoute
   ProfileRoute: typeof ProfileRoute
   ProgressRoute: typeof ProgressRoute
@@ -195,6 +194,7 @@ export interface RootRouteChildren {
   GamesSequenceRoute: typeof GamesSequenceRoute
   JournalIdRoute: typeof JournalIdRoute
   JournalNewRoute: typeof JournalNewRoute
+  CaregiverIndexRoute: typeof CaregiverIndexRoute
   GamesIndexRoute: typeof GamesIndexRoute
   JournalIndexRoute: typeof JournalIndexRoute
 }
@@ -206,13 +206,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/caregiver': {
-      id: '/caregiver'
-      path: '/caregiver'
-      fullPath: '/caregiver'
-      preLoaderRoute: typeof CaregiverRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -248,6 +241,13 @@ declare module '@tanstack/react-router' {
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/caregiver/': {
+      id: '/caregiver/'
+      path: '/caregiver'
+      fullPath: '/caregiver/'
+      preLoaderRoute: typeof CaregiverIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/games/': {
@@ -297,7 +297,6 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  CaregiverRoute: CaregiverRoute,
   DashboardRoute: DashboardRoute,
   ProfileRoute: ProfileRoute,
   ProgressRoute: ProgressRoute,
@@ -307,6 +306,7 @@ const rootRouteChildren: RootRouteChildren = {
   GamesSequenceRoute: GamesSequenceRoute,
   JournalIdRoute: JournalIdRoute,
   JournalNewRoute: JournalNewRoute,
+  CaregiverIndexRoute: CaregiverIndexRoute,
   GamesIndexRoute: GamesIndexRoute,
   JournalIndexRoute: JournalIndexRoute,
 }
