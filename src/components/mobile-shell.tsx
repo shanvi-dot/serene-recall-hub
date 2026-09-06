@@ -1,8 +1,9 @@
-import { Link, useRouterState } from "@tanstack/react-router";
-import { Home, Gamepad2, BookHeart, Bell, User } from "lucide-react";
+import { Link, useRouter, useRouterState } from "@tanstack/react-router";
+import { Home, Gamepad2, BookHeart, Bell, User, ArrowLeft, HeartHandshake } from "lucide-react";
 import type { ReactNode } from "react";
+import { useHome, useSession } from "@/lib/session";
 
-const tabs = [
+const patientTabs = [
   { to: "/dashboard", label: "Home", icon: Home },
   { to: "/games", label: "Games", icon: Gamepad2 },
   { to: "/journal", label: "Journal", icon: BookHeart },
@@ -10,8 +11,18 @@ const tabs = [
   { to: "/profile", label: "Profile", icon: User },
 ] as const;
 
+const caregiverTabs = [
+  { to: "/caregiver", label: "Home", icon: HeartHandshake },
+  { to: "/games", label: "Games", icon: Gamepad2 },
+  { to: "/journal", label: "Journal", icon: BookHeart },
+  { to: "/reminders", label: "Reminders", icon: Bell },
+  { to: "/caregiver/profile", label: "Profile", icon: User },
+] as const;
+
 export function MobileShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { role } = useSession();
+  const tabs = role === "caregiver" ? caregiverTabs : patientTabs;
 
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background">
@@ -24,9 +35,12 @@ export function MobileShell({ children }: { children: ReactNode }) {
       >
         <ul className="flex items-stretch justify-between">
           {tabs.map(({ to, label, icon: Icon }) => {
-            const active = pathname === to || pathname.startsWith(`${to}/`);
+            const active =
+              pathname === to ||
+              (to !== "/caregiver" && pathname.startsWith(`${to}/`)) ||
+              (to === "/caregiver" && pathname === "/caregiver");
             return (
-              <li key={to} className="flex-1">
+              <li key={label} className="flex-1">
                 <Link
                   to={to}
                   className={`tap-press flex min-h-14 flex-col items-center justify-center gap-1 rounded-2xl text-sm font-semibold ${
@@ -42,6 +56,30 @@ export function MobileShell({ children }: { children: ReactNode }) {
         </ul>
       </nav>
     </div>
+  );
+}
+
+/** Goes back to the previous page in this account's history, never across accounts. */
+export function BackButton({ label = "Go back" }: { label?: string }) {
+  const router = useRouter();
+  const home = useHome();
+
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      onClick={() => {
+        if (typeof window !== "undefined" && window.history.length > 1) {
+          router.history.back();
+        } else {
+          router.navigate({ to: home });
+        }
+      }}
+      className="tap-press flex size-12 shrink-0 items-center justify-center rounded-2xl bg-card text-primary"
+      style={{ boxShadow: "var(--shadow-soft)" }}
+    >
+      <ArrowLeft className="size-6" aria-hidden="true" />
+    </button>
   );
 }
 
