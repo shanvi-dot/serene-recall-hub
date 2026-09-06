@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { patient } from "@/lib/care-data";
 import { toast } from "sonner";
+import { useSession } from "@/lib/session";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
@@ -35,6 +36,7 @@ const circle = [
 
 function ProfileScreen() {
   const navigate = useNavigate();
+  const { role, signOut } = useSession();
   const [alerts, setAlerts] = useState(true);
   const [largeText, setLargeText] = useState(false);
 
@@ -107,11 +109,6 @@ function ProfileScreen() {
               aria-label="Larger text"
             />
           </SoftCard>
-          <Link to="/caregiver" className="block">
-            <SoftCard className="flex items-center gap-3 text-base font-semibold text-foreground">
-              <UserCog className="size-6 text-primary" aria-hidden="true" /> Caregiver dashboard
-            </SoftCard>
-          </Link>
           <SoftCard className="flex items-center gap-3 text-base font-semibold text-foreground">
             <ShieldCheck className="size-6 text-primary" aria-hidden="true" /> Privacy &amp; data
           </SoftCard>
@@ -131,6 +128,7 @@ function ProfileScreen() {
           size="care"
           className="mt-3 w-full font-bold"
           onClick={() => {
+            signOut();
             toast("You've been signed out.");
             navigate({ to: "/" });
           }}

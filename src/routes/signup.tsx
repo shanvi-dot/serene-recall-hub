@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "sonner";
+import { useSession, type Role } from "@/lib/session";
 import authBg from "@/assets/auth-dream.jpg";
 
 export const Route = createFileRoute("/signup")({
@@ -29,7 +30,8 @@ export const Route = createFileRoute("/signup")({
 
 function SignUpScreen() {
   const navigate = useNavigate();
-  const [role, setRole] = useState("patient");
+  const { signIn } = useSession();
+  const [role, setRole] = useState<Role>("patient");
   const [agreed, setAgreed] = useState(false);
 
   return (
@@ -56,6 +58,7 @@ function SignUpScreen() {
               toast.error("Please accept the Terms & Privacy Policy.");
               return;
             }
+            signIn(role);
             toast.success("Account created. Welcome to Lumen Care!");
             navigate({ to: role === "caregiver" ? "/caregiver" : "/dashboard" });
           }}
@@ -93,7 +96,7 @@ function SignUpScreen() {
 
           <fieldset className="space-y-2">
             <legend className="mb-2 text-base font-medium">I am signing up as</legend>
-            <RadioGroup value={role} onValueChange={setRole} className="grid grid-cols-2 gap-3">
+            <RadioGroup value={role} onValueChange={(v) => setRole(v as Role)} className="grid grid-cols-2 gap-3">
               {[
                 { value: "patient", label: "Patient" },
                 { value: "caregiver", label: "Caregiver" },
