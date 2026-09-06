@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
-import { Bell, LogOut, Phone, ShieldCheck, Type, UserCog } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Bell, LogOut, Phone, ShieldCheck, Type } from "lucide-react";
 import { MobileShell, ScreenHeader } from "@/components/mobile-shell";
 import { SoftCard, Pill } from "@/components/soft-card";
 import { Button } from "@/components/ui/button";
@@ -39,6 +39,10 @@ function ProfileScreen() {
   const { role, signOut } = useSession();
   const [alerts, setAlerts] = useState(true);
   const [largeText, setLargeText] = useState(false);
+
+  useEffect(() => {
+    if (role === "caregiver") navigate({ to: "/caregiver/profile", replace: true });
+  }, [role, navigate]);
 
   return (
     <MobileShell>
