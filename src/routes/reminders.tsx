@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 import { MobileShell, ScreenHeader } from "@/components/mobile-shell";
 import { SoftCard } from "@/components/soft-card";
@@ -8,8 +8,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { reminders as seed } from "@/lib/care-data";
+import { patient, reminders as seed } from "@/lib/care-data";
 import { toast } from "sonner";
+import { scopeKey, useSession } from "@/lib/session";
 
 export const Route = createFileRoute("/reminders")({
   head: () => ({
@@ -31,14 +32,27 @@ export const Route = createFileRoute("/reminders")({
 });
 
 function RemindersScreen() {
+  const { role, hydrated } = useSession();
   const [on, setOn] = useState(true);
   const [items, setItems] = useState(seed);
   const [adding, setAdding] = useState(false);
 
+  // Reminder state is stored per account, so patient and caregiver never mix.
+  useEffect(() => {
+    if (!hydrated) return;
+    const raw = window.localStorage.getItem(scopeKey(role, "reminders"));
+    setItems(raw ? (JSON.parse(raw) as typeof seed) : seed);
+  }, [role, hydrated]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    window.localStorage.setItem(scopeKey(role, "reminders"), JSON.stringify(items));
+  }, [items, role, hydrated]);
+
   return (
     <MobileShell>
       <main>
-        <ScreenHeader title="Daily Reminders" subtitle="Small nudges through the day" />
+        <ScreenHeader title="Daily Reminders" subtitle={role === "caregiver" ? `${patient.name}\u2019s day, from your account` : "Small nudges through the day"} />
 
         <SoftCard className="mb-5">
           <Label htmlFor="all-reminders" className="flex items-center justify-between text-lg font-semibold">

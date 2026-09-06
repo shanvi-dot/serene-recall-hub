@@ -1,4 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { useSession } from "@/lib/session";
 import { Gamepad2, BookHeart, Bell, TrendingUp, ChevronRight } from "lucide-react";
 import { MobileShell } from "@/components/mobile-shell";
 import { SoftCard, Pill } from "@/components/soft-card";
@@ -38,6 +40,13 @@ const navCards = [
 ] as const;
 
 function Dashboard() {
+  const navigate = useNavigate();
+  const { role } = useSession();
+
+  useEffect(() => {
+    if (role === "caregiver") navigate({ to: "/caregiver", replace: true });
+  }, [role, navigate]);
+
   const nextReminder = reminders.find((r) => !r.done) ?? reminders[0];
   const latest = memories[0];
   const trend = weeklyScores.at(-1)!.score - weeklyScores[0].score;

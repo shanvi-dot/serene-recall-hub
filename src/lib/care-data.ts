@@ -4,6 +4,14 @@ export const patient = {
   id: "PT-1042",
 };
 
+export const caregiver = {
+  name: "Mary",
+  fullName: "Mary Hayes",
+  relation: "Daughter · Primary caregiver",
+  phone: "07700 900123",
+  email: "mary.hayes@example.com",
+};
+
 export type Memory = {
   id: string;
   title: string;

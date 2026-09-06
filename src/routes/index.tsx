@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { useSession, type Role } from "@/lib/session";
 import authBg from "@/assets/auth-dream.jpg";
 
 export const Route = createFileRoute("/")({
@@ -35,7 +36,8 @@ export const Route = createFileRoute("/")({
 
 function LoginScreen() {
   const navigate = useNavigate();
-  const [role, setRole] = useState("patient");
+  const { signIn } = useSession();
+  const [role, setRole] = useState<Role>("patient");
 
   return (
     <main className="relative min-h-dvh w-full overflow-hidden">
@@ -60,6 +62,7 @@ function LoginScreen() {
           className="glass-card space-y-4 rounded-3xl p-6"
           onSubmit={(e) => {
             e.preventDefault();
+            signIn(role);
             toast.success("Welcome back!");
             navigate({ to: role === "caregiver" ? "/caregiver" : "/dashboard" });
           }}
@@ -90,19 +93,20 @@ function LoginScreen() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="role" className="text-base">
-              I am a…
-            </Label>
             <Select value={role} onValueChange={setRole}>
-              <SelectTrigger id="role" className="min-h-14 rounded-2xl bg-card text-base">
+              <SelectTrigger
+                id="role"
+                aria-label="Account type"
+                className="min-h-14 rounded-2xl bg-card text-base"
+              >
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="patient" className="text-base">
-                  I am a Patient
+                  Patient
                 </SelectItem>
                 <SelectItem value="caregiver" className="text-base">
-                  I am a Caregiver
+                  Caregiver
                 </SelectItem>
               </SelectContent>
             </Select>
