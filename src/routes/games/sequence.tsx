@@ -114,7 +114,8 @@ function SequenceGame() {
     }
   }
 
-  const size = gridSize(level);
+  const boxes = boxCount(level);
+  const columns = columnCount(level);
 
   return (
     <MobileShell>
