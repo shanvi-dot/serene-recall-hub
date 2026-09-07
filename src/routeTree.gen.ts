@@ -23,6 +23,7 @@ import { Route as GamesSequenceRouteImport } from './routes/games/sequence'
 import { Route as JournalIndexRouteImport } from './routes/journal/index'
 import { Route as JournalIdRouteImport } from './routes/journal/$id'
 import { Route as JournalNewRouteImport } from './routes/journal/new'
+import { Route as JournalQuizRouteImport } from './routes/journal/quiz'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -94,6 +95,11 @@ const JournalNewRoute = JournalNewRouteImport.update({
   path: '/journal/new',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JournalQuizRoute = JournalQuizRouteImport.update({
+  id: '/journal/quiz',
+  path: '/journal/quiz',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -107,6 +113,7 @@ export interface FileRoutesByFullPath {
   '/games/sequence': typeof GamesSequenceRoute
   '/journal/$id': typeof JournalIdRoute
   '/journal/new': typeof JournalNewRoute
+  '/journal/quiz': typeof JournalQuizRoute
   '/caregiver/': typeof CaregiverIndexRoute
   '/games/': typeof GamesIndexRoute
   '/journal/': typeof JournalIndexRoute
@@ -123,6 +130,7 @@ export interface FileRoutesByTo {
   '/games/sequence': typeof GamesSequenceRoute
   '/journal/$id': typeof JournalIdRoute
   '/journal/new': typeof JournalNewRoute
+  '/journal/quiz': typeof JournalQuizRoute
   '/caregiver': typeof CaregiverIndexRoute
   '/games': typeof GamesIndexRoute
   '/journal': typeof JournalIndexRoute
@@ -140,6 +148,7 @@ export interface FileRoutesById {
   '/games/sequence': typeof GamesSequenceRoute
   '/journal/$id': typeof JournalIdRoute
   '/journal/new': typeof JournalNewRoute
+  '/journal/quiz': typeof JournalQuizRoute
   '/caregiver/': typeof CaregiverIndexRoute
   '/games/': typeof GamesIndexRoute
   '/journal/': typeof JournalIndexRoute
@@ -158,6 +167,7 @@ export interface FileRouteTypes {
     | '/games/sequence'
     | '/journal/$id'
     | '/journal/new'
+    | '/journal/quiz'
     | '/caregiver/'
     | '/games/'
     | '/journal/'
@@ -174,6 +184,7 @@ export interface FileRouteTypes {
     | '/games/sequence'
     | '/journal/$id'
     | '/journal/new'
+    | '/journal/quiz'
     | '/caregiver'
     | '/games'
     | '/journal'
@@ -190,6 +201,7 @@ export interface FileRouteTypes {
     | '/games/sequence'
     | '/journal/$id'
     | '/journal/new'
+    | '/journal/quiz'
     | '/caregiver/'
     | '/games/'
     | '/journal/'
@@ -207,6 +219,7 @@ export interface RootRouteChildren {
   GamesSequenceRoute: typeof GamesSequenceRoute
   JournalIdRoute: typeof JournalIdRoute
   JournalNewRoute: typeof JournalNewRoute
+  JournalQuizRoute: typeof JournalQuizRoute
   CaregiverIndexRoute: typeof CaregiverIndexRoute
   GamesIndexRoute: typeof GamesIndexRoute
   JournalIndexRoute: typeof JournalIndexRoute
@@ -312,6 +325,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JournalNewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/journal/quiz': {
+      id: '/journal/quiz'
+      path: '/journal/quiz'
+      fullPath: '/journal/quiz'
+      preLoaderRoute: typeof JournalQuizRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -327,6 +347,7 @@ const rootRouteChildren: RootRouteChildren = {
   GamesSequenceRoute: GamesSequenceRoute,
   JournalIdRoute: JournalIdRoute,
   JournalNewRoute: JournalNewRoute,
+  JournalQuizRoute: JournalQuizRoute,
   CaregiverIndexRoute: CaregiverIndexRoute,
   GamesIndexRoute: GamesIndexRoute,
   JournalIndexRoute: JournalIndexRoute,
