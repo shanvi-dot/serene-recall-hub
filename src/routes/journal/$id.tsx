@@ -99,57 +99,18 @@ function MemoryDetail() {
         </SoftCard>
 
         <section className="mt-6">
-          <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-foreground">Gentle recall quiz</h2>
-            <Pill tone="success">
-              {correct} of {memory.quiz.length}
-            </Pill>
-          </div>
-
-          <div className="space-y-4">
-            {memory.quiz.map((q, i) => (
-              <SoftCard key={q.question}>
-                <p className="text-base font-semibold text-foreground">{q.question}</p>
-                <div className="mt-3 space-y-3">
-                  {q.options.map((opt, oi) => {
-                    const picked = answers[i] === oi;
-                    const isCorrect = picked && oi === q.answer;
-                    return (
-                      <button
-                        key={opt}
-                        type="button"
-                        onClick={() => {
-                          setAnswers((a) => ({ ...a, [i]: oi }));
-                          toast(oi === q.answer ? "That's right!" : "Not quite — try again.");
-                        }}
-                        className={`tap-press flex min-h-14 w-full items-center justify-between rounded-2xl px-4 text-base font-semibold ${
-                          isCorrect
-                            ? "bg-success text-success-foreground"
-                            : picked
-                              ? "bg-destructive/40 text-foreground"
-                              : "bg-muted text-foreground"
-                        }`}
-                      >
-                        {opt}
-                        {isCorrect ? <Check className="size-6" aria-hidden="true" /> : null}
-                      </button>
-                    );
-                  })}
-                </div>
-              </SoftCard>
-            ))}
-          </div>
-
-          {answered === memory.quiz.length ? (
-            <Button
-              variant="gold"
-              size="care"
-              className="mt-5 w-full font-bold"
-              onClick={() => toast.success("Well done — quiz saved to your progress.")}
+          <SoftCard>
+            <h2 className="text-lg font-semibold text-foreground">Weekly quiz</h2>
+            <p className="mt-1 text-base text-muted-foreground">
+              Questions about this memory now come up in the gentle end-of-week quiz.
+            </p>
+            <Link
+              to="/journal/quiz"
+              className="tap-press mt-4 flex min-h-14 items-center justify-center rounded-2xl bg-muted text-base font-semibold text-primary"
             >
-              Finish quiz
-            </Button>
-          ) : null}
+              Go to weekly quiz
+            </Link>
+          </SoftCard>
         </section>
       </main>
     </MobileShell>
