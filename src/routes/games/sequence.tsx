@@ -44,14 +44,23 @@ const tints = [
   "bg-success/45",
 ];
 
-function gridSize(level: number) {
-  return level >= 4 ? 4 : 3;
+/** Level 1 starts with four boxes; each level adds more boxes to remember. */
+const levelBoxes = [4, 6, 9, 12, 16];
+const levelColumns = [2, 3, 3, 4, 4];
+
+function boxCount(level: number) {
+  return levelBoxes[Math.min(level, levelBoxes.length) - 1] ?? 4;
+}
+
+function columnCount(level: number) {
+  return levelColumns[Math.min(level, levelColumns.length) - 1] ?? 2;
 }
 
 function makePattern(level: number) {
-  const cells = gridSize(level) ** 2;
+  const cells = boxCount(level);
   return Array.from({ length: level + 2 }, () => Math.floor(Math.random() * cells));
 }
+
 
 function SequenceGame() {
   const [level, setLevel] = useState(1);
