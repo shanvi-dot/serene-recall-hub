@@ -10,12 +10,12 @@ export const Route = createFileRoute("/games/")({
       {
         name: "description",
         content:
-          "Two calm cognitive games: Memory Match for object sequences and Sequence Master for colour grid patterns, with five gentle levels each.",
+          "Two calm cognitive games: Memory Match, where you turn over cards to find pairs, and Sequence Master for colour grid patterns.",
       },
       { property: "og:title", content: "Gentle Memory Games — Lumen Care" },
       {
         property: "og:description",
-        content: "Memory Match and Sequence Master — calm games with five gentle levels each.",
+        content: "Memory Match card pairs and Sequence Master colour patterns — calm and gentle.",
       },
     ],
   }),
@@ -26,7 +26,7 @@ const games = [
   {
     to: "/games/memory" as const,
     title: "Memory Match",
-    description: "Watch & remember the sequence",
+    description: "Turn over cards and find the pairs",
     icon: Brain,
     score: 180,
   },
