@@ -93,7 +93,7 @@ function LoginScreen() {
           </div>
 
           <div className="space-y-2">
-            <Select value={role} onValueChange={setRole}>
+            <Select value={role} onValueChange={(v) => setRole(v as Role)}>
               <SelectTrigger
                 id="role"
                 aria-label="Account type"

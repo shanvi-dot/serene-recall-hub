@@ -47,9 +47,9 @@ function Dashboard() {
     if (role === "caregiver") navigate({ to: "/caregiver", replace: true });
   }, [role, navigate]);
 
-  const nextReminder = reminders.find((r) => !r.done) ?? reminders[0];
-  const latest = memories[0];
-  const trend = weeklyScores.at(-1)!.score - weeklyScores[0].score;
+  const nextReminder = reminders.find((r) => !r.done) ?? reminders[0]!;
+  const latest = memories[0]!;
+  const trend = weeklyScores.at(-1)!.score - weeklyScores[0]!.score;
 
   return (
     <MobileShell>

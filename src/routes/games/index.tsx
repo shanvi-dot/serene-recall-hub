@@ -10,12 +10,12 @@ export const Route = createFileRoute("/games/")({
       {
         name: "description",
         content:
-          "Two calm cognitive games: Memory Match for object sequences and Sequence Master for colour grid patterns, with five gentle levels each.",
+          "Two calm cognitive games: Memory Match, where you turn over cards to find pairs, and Sequence Master for colour grid patterns.",
       },
       { property: "og:title", content: "Gentle Memory Games — Lumen Care" },
       {
         property: "og:description",
-        content: "Memory Match and Sequence Master — calm games with five gentle levels each.",
+        content: "Memory Match card pairs and Sequence Master colour patterns — calm and gentle.",
       },
     ],
   }),
@@ -26,8 +26,9 @@ const games = [
   {
     to: "/games/memory" as const,
     title: "Memory Match",
-    description: "Watch & remember the sequence",
+    description: "Turn over cards and find the pairs",
     icon: Brain,
+    badge: "3 pairs to start",
     score: 180,
   },
   {
@@ -35,6 +36,7 @@ const games = [
     title: "Sequence Master",
     description: "Repeat the pattern",
     icon: Grid3x3,
+    badge: "Level 1/5",
     score: 140,
   },
 ];
@@ -55,7 +57,7 @@ function GamesScreen() {
                   <h2 className="text-xl font-bold text-foreground">{g.title}</h2>
                   <p className="text-base text-muted-foreground">{g.description}</p>
                   <div className="mt-3 flex flex-wrap items-center gap-2">
-                    <Pill>Level 1/5</Pill>
+                    <Pill>{g.badge}</Pill>
                     <Pill tone="gold">Recent score {g.score}</Pill>
                   </div>
                 </div>
