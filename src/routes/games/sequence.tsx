@@ -145,9 +145,9 @@ function SequenceGame() {
 
           <div
             className="mx-auto mt-5 grid gap-3"
-            style={{ gridTemplateColumns: `repeat(${size}, minmax(0, 1fr))` }}
+            style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}
           >
-            {Array.from({ length: size * size }, (_, cell) => (
+            {Array.from({ length: boxes }, (_, cell) => (
               <button
                 key={cell}
                 onClick={() => tap(cell)}
