@@ -44,14 +44,23 @@ const tints = [
   "bg-success/45",
 ];
 
-function gridSize(level: number) {
-  return level >= 4 ? 4 : 3;
+/** Level 1 starts with four boxes; each level adds more boxes to remember. */
+const levelBoxes = [4, 6, 9, 12, 16];
+const levelColumns = [2, 3, 3, 4, 4];
+
+function boxCount(level: number) {
+  return levelBoxes[Math.min(level, levelBoxes.length) - 1] ?? 4;
+}
+
+function columnCount(level: number) {
+  return levelColumns[Math.min(level, levelColumns.length) - 1] ?? 2;
 }
 
 function makePattern(level: number) {
-  const cells = gridSize(level) ** 2;
+  const cells = boxCount(level);
   return Array.from({ length: level + 2 }, () => Math.floor(Math.random() * cells));
 }
+
 
 function SequenceGame() {
   const [level, setLevel] = useState(1);
@@ -105,7 +114,8 @@ function SequenceGame() {
     }
   }
 
-  const size = gridSize(level);
+  const boxes = boxCount(level);
+  const columns = columnCount(level);
 
   return (
     <MobileShell>
@@ -135,9 +145,9 @@ function SequenceGame() {
 
           <div
             className="mx-auto mt-5 grid gap-3"
-            style={{ gridTemplateColumns: `repeat(${size}, minmax(0, 1fr))` }}
+            style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}
           >
-            {Array.from({ length: size * size }, (_, cell) => (
+            {Array.from({ length: boxes }, (_, cell) => (
               <button
                 key={cell}
                 onClick={() => tap(cell)}
