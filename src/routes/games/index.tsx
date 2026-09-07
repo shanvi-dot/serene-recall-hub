@@ -28,6 +28,7 @@ const games = [
     title: "Memory Match",
     description: "Turn over cards and find the pairs",
     icon: Brain,
+    badge: "3 pairs to start",
     score: 180,
   },
   {
@@ -35,6 +36,7 @@ const games = [
     title: "Sequence Master",
     description: "Repeat the pattern",
     icon: Grid3x3,
+    badge: "Level 1/5",
     score: 140,
   },
 ];
@@ -55,7 +57,7 @@ function GamesScreen() {
                   <h2 className="text-xl font-bold text-foreground">{g.title}</h2>
                   <p className="text-base text-muted-foreground">{g.description}</p>
                   <div className="mt-3 flex flex-wrap items-center gap-2">
-                    <Pill>Level 1/5</Pill>
+                    <Pill>{g.badge}</Pill>
                     <Pill tone="gold">Recent score {g.score}</Pill>
                   </div>
                 </div>
