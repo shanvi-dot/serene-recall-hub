@@ -65,7 +65,7 @@ function SequenceGame() {
   useEffect(() => {
     if (phase !== "watch") return;
     let i = 0;
-    setFlash(pattern[0]);
+    setFlash(pattern[0] ?? null);
     const id = setInterval(() => {
       i += 1;
       if (i >= pattern.length) {
@@ -74,7 +74,7 @@ function SequenceGame() {
         setPhase("repeat");
         return;
       }
-      setFlash(pattern[i]);
+      setFlash(pattern[i] ?? null);
     }, 900);
     return () => clearInterval(id);
   }, [phase, pattern]);
