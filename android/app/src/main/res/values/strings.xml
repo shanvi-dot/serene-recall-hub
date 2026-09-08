@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Neuro Mitra</string>
+    <string name="title_activity_main">Neuro Mitra</string>
+    <string name="package_name">com.neuromitra.com</string>
+    <string name="custom_url_scheme">com.neuromitra.com</string>
+</resources>
