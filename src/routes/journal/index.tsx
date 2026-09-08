@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Plus } from "lucide-react";
+import { Plus, Sparkles } from "lucide-react";
 import { MobileShell, ScreenHeader } from "@/components/mobile-shell";
 import { SoftCard } from "@/components/soft-card";
 import { memories, sentimentLabel } from "@/lib/care-data";
@@ -40,6 +40,18 @@ function JournalList() {
             </Link>
           }
         />
+
+        <Link to="/journal/quiz" className="tap-press mb-5 block">
+          <SoftCard className="flex items-center gap-4 gold-bg">
+            <Sparkles className="size-8 shrink-0 text-accent-foreground" aria-hidden="true" />
+            <div>
+              <h2 className="text-lg font-bold text-accent-foreground">Weekly quiz</h2>
+              <p className="text-base text-accent-foreground/80">
+                Gentle questions about this week's memories
+              </p>
+            </div>
+          </SoftCard>
+        </Link>
 
         <ul className="space-y-4">
           {memories.map((m) => {
