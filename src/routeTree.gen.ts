@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DailyNewsRouteImport } from './routes/daily-news'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as ProgressRouteImport } from './routes/progress'
@@ -28,6 +29,11 @@ import { Route as JournalQuizRouteImport } from './routes/journal/quiz'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DailyNewsRoute = DailyNewsRouteImport.update({
+  id: '/daily-news',
+  path: '/daily-news',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -103,6 +109,7 @@ const JournalQuizRoute = JournalQuizRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/daily-news': typeof DailyNewsRoute
   '/dashboard': typeof DashboardRoute
   '/profile': typeof ProfileRoute
   '/progress': typeof ProgressRoute
@@ -120,6 +127,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/daily-news': typeof DailyNewsRoute
   '/dashboard': typeof DashboardRoute
   '/profile': typeof ProfileRoute
   '/progress': typeof ProgressRoute
@@ -138,6 +146,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/daily-news': typeof DailyNewsRoute
   '/dashboard': typeof DashboardRoute
   '/profile': typeof ProfileRoute
   '/progress': typeof ProgressRoute
@@ -157,6 +166,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/daily-news'
     | '/dashboard'
     | '/profile'
     | '/progress'
@@ -174,6 +184,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/daily-news'
     | '/dashboard'
     | '/profile'
     | '/progress'
@@ -191,6 +202,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/daily-news'
     | '/dashboard'
     | '/profile'
     | '/progress'
@@ -209,6 +221,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DailyNewsRoute: typeof DailyNewsRoute
   DashboardRoute: typeof DashboardRoute
   ProfileRoute: typeof ProfileRoute
   ProgressRoute: typeof ProgressRoute
@@ -232,6 +245,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/daily-news': {
+      id: '/daily-news'
+      path: '/daily-news'
+      fullPath: '/daily-news'
+      preLoaderRoute: typeof DailyNewsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -337,6 +357,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DailyNewsRoute: DailyNewsRoute,
   DashboardRoute: DashboardRoute,
   ProfileRoute: ProfileRoute,
   ProgressRoute: ProgressRoute,

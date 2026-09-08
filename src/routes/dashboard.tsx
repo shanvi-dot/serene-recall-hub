@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useSession } from "@/lib/session";
-import { Gamepad2, BookHeart, Bell, TrendingUp, ChevronRight } from "lucide-react";
+import { Gamepad2, BookHeart, Bell, TrendingUp, ChevronRight, Newspaper } from "lucide-react";
 import { MobileShell } from "@/components/mobile-shell";
 import { SoftCard, Pill } from "@/components/soft-card";
 import {
