@@ -1,17 +1,9 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { toast } from "sonner";
-import { useSession, type Role } from "@/lib/session";
+import { useSession } from "@/lib/session";
 import authBg from "@/assets/auth-dream.jpg";
 
 export const Route = createFileRoute("/")({
@@ -37,7 +29,6 @@ export const Route = createFileRoute("/")({
 function LoginScreen() {
   const navigate = useNavigate();
   const { signIn } = useSession();
-  const [role, setRole] = useState<Role>("patient");
 
   return (
     <main className="relative min-h-dvh w-full overflow-hidden">
@@ -62,9 +53,9 @@ function LoginScreen() {
           className="glass-card space-y-4 rounded-3xl p-6"
           onSubmit={(e) => {
             e.preventDefault();
-            signIn(role);
+            signIn("patient");
             toast.success("Welcome back!");
-            navigate({ to: role === "caregiver" ? "/caregiver" : "/dashboard" });
+            navigate({ to: "/dashboard" });
           }}
         >
           <div className="space-y-2">
