@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useSession } from "@/lib/session";
-import { Gamepad2, BookHeart, Bell, TrendingUp, ChevronRight } from "lucide-react";
+import { Gamepad2, BookHeart, Bell, TrendingUp, ChevronRight, Newspaper } from "lucide-react";
 import { MobileShell } from "@/components/mobile-shell";
 import { SoftCard, Pill } from "@/components/soft-card";
 import {
@@ -12,6 +12,7 @@ import {
   weeklyScores,
   patient,
 } from "@/lib/care-data";
+import { todaysItem, categoryLabel } from "@/lib/daily-news";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -50,6 +51,7 @@ function Dashboard() {
   const nextReminder = reminders.find((r) => !r.done) ?? reminders[0]!;
   const latest = memories[0]!;
   const trend = weeklyScores.at(-1)!.score - weeklyScores[0]!.score;
+  const daily = todaysItem();
 
   return (
     <MobileShell>
@@ -139,6 +141,26 @@ function Dashboard() {
                 </li>
               ))}
             </ul>
+          </SoftCard>
+
+          <SoftCard>
+            <div className="mb-3 flex items-center justify-between">
+              <h2 className="text-lg font-semibold">Daily news</h2>
+              <Pill tone="gold">{categoryLabel[daily.category]}</Pill>
+            </div>
+            <div className="flex items-start gap-3">
+              <Newspaper className="mt-1 size-8 shrink-0 text-primary" aria-hidden="true" />
+              <div>
+                <p className="text-base font-semibold text-foreground">{daily.title}</p>
+                <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{daily.body}</p>
+              </div>
+            </div>
+            <Link
+              to="/daily-news"
+              className="mt-4 flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-muted text-base font-semibold text-primary"
+            >
+              Read today&apos;s story <ChevronRight className="size-5" aria-hidden="true" />
+            </Link>
           </SoftCard>
         </div>
       </main>
