@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 
-const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY")!;
+const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY")!;
 
 serve(async (req) => {
   const { journalContent } = await req.json();
@@ -10,13 +10,16 @@ serve(async (req) => {
 Journal entry:
 """${journalContent}"""`;
 
-  const res = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: { "content-type": "application/json", "x-api-key": ANTHROPIC_API_KEY, "anthropic-version": "2023-06-01" },
-    body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 300, messages: [{ role: "user", content: prompt }] }),
-  });
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+    {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
+    }
+  );
   const data = await res.json();
-  const text = data.content?.[0]?.text ?? "{}";
+  const text = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "{}";
   try {
     const parsed = JSON.parse(text.replace(/```json|```/g, "").trim());
     return new Response(JSON.stringify(parsed), { headers: { "content-type": "application/json" } });
