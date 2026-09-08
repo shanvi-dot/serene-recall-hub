@@ -126,7 +126,20 @@ function Dashboard() {
           <SoftCard>
             <div className="mb-3 flex items-center justify-between">
               <h2 className="text-lg font-semibold">Weekly cognitive score</h2>
-...
+              <Pill tone="success">+{trend} pts</Pill>
+            </div>
+            <ul className="flex h-32 items-end justify-between gap-2">
+              {weeklyScores.map((d) => (
+                <li key={d.day} className="flex flex-1 flex-col items-center gap-2">
+                  <div
+                    className="w-full rounded-t-xl bg-primary/80"
+                    style={{ height: `${d.score}%` }}
+                    aria-hidden="true"
+                  />
+                  <span className="text-sm text-muted-foreground">{d.day}</span>
+                  <span className="sr-only">{d.score} points</span>
+                </li>
+              ))}
             </ul>
           </SoftCard>
 
