@@ -124,21 +124,28 @@ function Dashboard() {
           <SoftCard>
             <div className="mb-3 flex items-center justify-between">
               <h2 className="text-lg font-semibold">Weekly cognitive score</h2>
-              <Pill tone="success">+{trend} pts</Pill>
-            </div>
-            <ul className="flex h-32 items-end justify-between gap-2">
-              {weeklyScores.map((d) => (
-                <li key={d.day} className="flex flex-1 flex-col items-center gap-2">
-                  <div
-                    className="w-full rounded-t-xl bg-primary/80"
-                    style={{ height: `${d.score}%` }}
-                    aria-hidden="true"
-                  />
-                  <span className="text-sm text-muted-foreground">{d.day}</span>
-                  <span className="sr-only">{d.score} points</span>
-                </li>
-              ))}
+...
             </ul>
+          </SoftCard>
+
+          <SoftCard>
+            <div className="mb-3 flex items-center justify-between">
+              <h2 className="text-lg font-semibold">Daily news</h2>
+              <Pill tone="gold">{categoryLabel[daily.category]}</Pill>
+            </div>
+            <div className="flex items-start gap-3">
+              <Newspaper className="mt-1 size-8 shrink-0 text-primary" aria-hidden="true" />
+              <div>
+                <p className="text-base font-semibold text-foreground">{daily.title}</p>
+                <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{daily.body}</p>
+              </div>
+            </div>
+            <Link
+              to="/daily-news"
+              className="mt-4 flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-muted text-base font-semibold text-primary"
+            >
+              Read today&apos;s story <ChevronRight className="size-5" aria-hidden="true" />
+            </Link>
           </SoftCard>
         </div>
       </main>
