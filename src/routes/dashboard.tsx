@@ -12,6 +12,7 @@ import {
   weeklyScores,
   patient,
 } from "@/lib/care-data";
+import { todaysItem, categoryLabel } from "@/lib/daily-news";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -50,6 +51,7 @@ function Dashboard() {
   const nextReminder = reminders.find((r) => !r.done) ?? reminders[0]!;
   const latest = memories[0]!;
   const trend = weeklyScores.at(-1)!.score - weeklyScores[0]!.score;
+  const daily = todaysItem();
 
   return (
     <MobileShell>
