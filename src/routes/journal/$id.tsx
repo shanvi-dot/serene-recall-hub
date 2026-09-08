@@ -1,11 +1,8 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { useState } from "react";
-import { ArrowLeft, Check, MapPin, Users, Calendar } from "lucide-react";
+import { ArrowLeft, MapPin, Users, Calendar } from "lucide-react";
 import { MobileShell } from "@/components/mobile-shell";
-import { SoftCard, Pill } from "@/components/soft-card";
-import { Button } from "@/components/ui/button";
+import { SoftCard } from "@/components/soft-card";
 import { memories, sentimentLabel } from "@/lib/care-data";
-import { toast } from "sonner";
 
 export const Route = createFileRoute("/journal/$id")({
   loader: ({ params }) => {
@@ -54,9 +51,6 @@ function MemoryNotFound() {
 function MemoryDetail() {
   const { memory } = Route.useLoaderData();
   const s = sentimentLabel[memory.sentiment];
-  const [answers, setAnswers] = useState<Record<number, number>>({});
-  const answered = Object.keys(answers).length;
-  const correct = memory.quiz.filter((q, i) => answers[i] === q.answer).length;
 
   return (
     <MobileShell>
