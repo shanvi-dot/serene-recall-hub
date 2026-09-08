@@ -83,26 +83,6 @@ function LoginScreen() {
             />
           </div>
 
-          <div className="space-y-2">
-            <Select value={role} onValueChange={(v) => setRole(v as Role)}>
-              <SelectTrigger
-                id="role"
-                aria-label="Account type"
-                className="min-h-14 rounded-2xl bg-card text-base"
-              >
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="patient" className="text-base">
-                  Patient
-                </SelectItem>
-                <SelectItem value="caregiver" className="text-base">
-                  Caregiver
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
           <button
             type="button"
             onClick={() => toast("We'll send a reset link to your email.")}
