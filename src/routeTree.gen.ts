@@ -18,6 +18,7 @@ import { Route as RemindersRouteImport } from './routes/reminders'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as CaregiverIndexRouteImport } from './routes/caregiver/index'
 import { Route as CaregiverProfileRouteImport } from './routes/caregiver/profile'
+import { Route as CaregiverUnlockRouteImport } from './routes/caregiver/unlock'
 import { Route as GamesIndexRouteImport } from './routes/games/index'
 import { Route as GamesMemoryRouteImport } from './routes/games/memory'
 import { Route as GamesSequenceRouteImport } from './routes/games/sequence'
@@ -71,6 +72,11 @@ const CaregiverProfileRoute = CaregiverProfileRouteImport.update({
   path: '/caregiver/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CaregiverUnlockRoute = CaregiverUnlockRouteImport.update({
+  id: '/caregiver/unlock',
+  path: '/caregiver/unlock',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GamesIndexRoute = GamesIndexRouteImport.update({
   id: '/games/',
   path: '/games/',
@@ -116,6 +122,7 @@ export interface FileRoutesByFullPath {
   '/reminders': typeof RemindersRoute
   '/signup': typeof SignupRoute
   '/caregiver/profile': typeof CaregiverProfileRoute
+  '/caregiver/unlock': typeof CaregiverUnlockRoute
   '/games/memory': typeof GamesMemoryRoute
   '/games/sequence': typeof GamesSequenceRoute
   '/journal/$id': typeof JournalIdRoute
@@ -134,6 +141,7 @@ export interface FileRoutesByTo {
   '/reminders': typeof RemindersRoute
   '/signup': typeof SignupRoute
   '/caregiver/profile': typeof CaregiverProfileRoute
+  '/caregiver/unlock': typeof CaregiverUnlockRoute
   '/games/memory': typeof GamesMemoryRoute
   '/games/sequence': typeof GamesSequenceRoute
   '/journal/$id': typeof JournalIdRoute
@@ -153,6 +161,7 @@ export interface FileRoutesById {
   '/reminders': typeof RemindersRoute
   '/signup': typeof SignupRoute
   '/caregiver/profile': typeof CaregiverProfileRoute
+  '/caregiver/unlock': typeof CaregiverUnlockRoute
   '/games/memory': typeof GamesMemoryRoute
   '/games/sequence': typeof GamesSequenceRoute
   '/journal/$id': typeof JournalIdRoute
@@ -173,6 +182,7 @@ export interface FileRouteTypes {
     | '/reminders'
     | '/signup'
     | '/caregiver/profile'
+    | '/caregiver/unlock'
     | '/games/memory'
     | '/games/sequence'
     | '/journal/$id'
@@ -191,6 +201,7 @@ export interface FileRouteTypes {
     | '/reminders'
     | '/signup'
     | '/caregiver/profile'
+    | '/caregiver/unlock'
     | '/games/memory'
     | '/games/sequence'
     | '/journal/$id'
@@ -209,6 +220,7 @@ export interface FileRouteTypes {
     | '/reminders'
     | '/signup'
     | '/caregiver/profile'
+    | '/caregiver/unlock'
     | '/games/memory'
     | '/games/sequence'
     | '/journal/$id'
@@ -228,6 +240,7 @@ export interface RootRouteChildren {
   RemindersRoute: typeof RemindersRoute
   SignupRoute: typeof SignupRoute
   CaregiverProfileRoute: typeof CaregiverProfileRoute
+  CaregiverUnlockRoute: typeof CaregiverUnlockRoute
   GamesMemoryRoute: typeof GamesMemoryRoute
   GamesSequenceRoute: typeof GamesSequenceRoute
   JournalIdRoute: typeof JournalIdRoute
@@ -303,6 +316,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CaregiverProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/caregiver/unlock': {
+      id: '/caregiver/unlock'
+      path: '/caregiver/unlock'
+      fullPath: '/caregiver/unlock'
+      preLoaderRoute: typeof CaregiverUnlockRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/games/': {
       id: '/games/'
       path: '/games'
@@ -364,6 +384,7 @@ const rootRouteChildren: RootRouteChildren = {
   RemindersRoute: RemindersRoute,
   SignupRoute: SignupRoute,
   CaregiverProfileRoute: CaregiverProfileRoute,
+  CaregiverUnlockRoute: CaregiverUnlockRoute,
   GamesMemoryRoute: GamesMemoryRoute,
   GamesSequenceRoute: GamesSequenceRoute,
   JournalIdRoute: JournalIdRoute,

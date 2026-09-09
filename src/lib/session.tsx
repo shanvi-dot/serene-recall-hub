@@ -8,59 +8,81 @@ import {
   type ReactNode,
 } from "react";
 
-export type Role = "patient" | "caregiver";
+/**
+ * "view" replaces the old "role". There is only ONE real account type now
+ * (caregiver, via Supabase Auth — wired in later). "view" just controls
+ * which screens are showing on this device right now.
+ * - "patient": default, shown day-to-day
+ * - "caregiver": unlocked via PIN in Settings > Caregiver Profile
+ */
+export type View = "patient" | "caregiver";
 
-const ROLE_KEY = "lumen.session.role";
+const AUTH_KEY = "lumen.session.authenticated";
+const VIEW_KEY = "lumen.session.view";
 
-/** Storage prefix so patient and caregiver state never share a key. */
-export function scopeKey(role: Role, name: string) {
-  return `lumen.state.${role}.${name}`;
+export function scopeKey(view: View, name: string) {
+  return `lumen.state.${view}.${name}`;
 }
 
-function clearScope(role: Role) {
+function clearScope(view: View) {
   if (typeof window === "undefined") return;
-  const prefix = `lumen.state.${role}.`;
+  const prefix = `lumen.state.${view}.`;
   Object.keys(window.localStorage)
     .filter((k) => k.startsWith(prefix))
     .forEach((k) => window.localStorage.removeItem(k));
 }
 
 type SessionValue = {
-  role: Role;
+  isAuthenticated: boolean;
+  view: View;
   hydrated: boolean;
-  signIn: (role: Role) => void;
+  /** Call once signup/login succeeds. Logs the device in, shows patient view. */
+  completeAuth: () => void;
+  /** Switch this device's current view. Does NOT re-authenticate. */
+  setView: (view: View) => void;
+  /** Full sign-out — back to the login screen. */
   signOut: () => void;
 };
 
 const SessionContext = createContext<SessionValue | null>(null);
 
 export function SessionProvider({ children }: { children: ReactNode }) {
-  const [role, setRole] = useState<Role>("patient");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [view, setViewState] = useState<View>("patient");
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    const stored = window.localStorage.getItem(ROLE_KEY);
-    if (stored === "caregiver" || stored === "patient") setRole(stored);
+    const authed = window.localStorage.getItem(AUTH_KEY) === "true";
+    const storedView = window.localStorage.getItem(VIEW_KEY);
+    setIsAuthenticated(authed);
+    if (storedView === "caregiver" || storedView === "patient") setViewState(storedView);
     setHydrated(true);
   }, []);
 
-  const signIn = useCallback((next: Role) => {
-    // Signing in as one role wipes any leftover scratch state of the other.
-    clearScope(next === "patient" ? "caregiver" : "patient");
-    window.localStorage.setItem(ROLE_KEY, next);
-    setRole(next);
+  const completeAuth = useCallback(() => {
+    window.localStorage.setItem(AUTH_KEY, "true");
+    window.localStorage.setItem(VIEW_KEY, "patient");
+    setIsAuthenticated(true);
+    setViewState("patient");
+  }, []);
+
+  const setView = useCallback((next: View) => {
+    window.localStorage.setItem(VIEW_KEY, next);
+    setViewState(next);
   }, []);
 
   const signOut = useCallback(() => {
     clearScope("patient");
     clearScope("caregiver");
-    window.localStorage.removeItem(ROLE_KEY);
-    setRole("patient");
+    window.localStorage.removeItem(AUTH_KEY);
+    window.localStorage.removeItem(VIEW_KEY);
+    setIsAuthenticated(false);
+    setViewState("patient");
   }, []);
 
   const value = useMemo(
-    () => ({ role, hydrated, signIn, signOut }),
-    [role, hydrated, signIn, signOut],
+    () => ({ isAuthenticated, view, hydrated, completeAuth, setView, signOut }),
+    [isAuthenticated, view, hydrated, completeAuth, setView, signOut],
   );
 
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;
@@ -70,10 +92,4 @@ export function useSession() {
   const ctx = useContext(SessionContext);
   if (!ctx) throw new Error("useSession must be used inside SessionProvider");
   return ctx;
-}
-
-/** Where "home" is for the signed-in role. */
-export function useHome() {
-  const { role } = useSession();
-  return role === "caregiver" ? ("/caregiver" as const) : ("/dashboard" as const);
 }

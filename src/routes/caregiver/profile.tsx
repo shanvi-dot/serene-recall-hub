@@ -1,94 +1,68 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { Bell, LogOut, Mail, Phone, ShieldCheck, UserCog } from "lucide-react";
+import { useState } from "react";
+import { Bell, LogOut, Phone, ShieldCheck, Type, UserCog } from "lucide-react";
 import { MobileShell, ScreenHeader } from "@/components/mobile-shell";
 import { SoftCard, Pill } from "@/components/soft-card";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { caregiver, patient } from "@/lib/care-data";
-import { useSession } from "@/lib/session";
+import { patient } from "@/lib/care-data";
 import { toast } from "sonner";
+import { useSession } from "@/lib/session";
 
 export const Route = createFileRoute("/caregiver/profile")({
-  head: () => ({
-    meta: [
-      { title: "Caregiver Profile — Lumen Care" },
-      {
-        name: "description",
-        content:
-          "Your caregiver account: the person you care for, alert preferences, weekly summaries and account controls.",
-      },
-      { property: "og:title", content: "Caregiver Profile — Lumen Care" },
-      {
-        property: "og:description",
-        content: "Your caregiver account, alert preferences and weekly summaries.",
-      },
-    ],
-  }),
-  component: CaregiverProfile,
+  component: ProfileScreen,
 });
 
-function CaregiverProfile() {
-  const navigate = useNavigate();
-  const { role, signIn, signOut } = useSession();
-  const [alerts, setAlerts] = useState(true);
-  const [weekly, setWeekly] = useState(true);
+const circle = [
+  { name: "Mary Hayes", relation: "Daughter · Primary caregiver", phone: "07700 900123" },
+  { name: "Robert Hayes", relation: "Son", phone: "07700 900456" },
+  { name: "Dr. Amara Osei", relation: "GP", phone: "01273 900789" },
+];
 
-  useEffect(() => {
-    if (role !== "caregiver") signIn("caregiver");
-  }, [role, signIn]);
+function ProfileScreen() {
+  const navigate = useNavigate();
+  const { signOut, setView } = useSession();
+  const [alerts, setAlerts] = useState(true);
+  const [largeText, setLargeText] = useState(false);
 
   return (
     <MobileShell>
       <main>
-        <ScreenHeader title="My Profile" subtitle="Your caregiver account" />
+        <ScreenHeader title="My Profile" subtitle="Your details and preferences" />
 
         <SoftCard className="flex items-center gap-4">
           <div className="flex size-16 items-center justify-center rounded-full bg-primary text-2xl font-bold text-primary-foreground">
-            {caregiver.name.charAt(0)}
+            {patient.name.charAt(0)}
           </div>
           <div>
-            <p className="text-lg font-semibold text-foreground">{caregiver.fullName}</p>
-            <p className="text-base text-muted-foreground">{caregiver.relation}</p>
+            <p className="text-lg font-semibold text-foreground">{patient.fullName}</p>
+            <p className="text-base text-muted-foreground">Patient ID {patient.id}</p>
             <div className="mt-2">
-              <Pill tone="gold">Caregiver account</Pill>
+              <Pill tone="gold">Early stage care plan</Pill>
             </div>
           </div>
         </SoftCard>
 
-        <SoftCard className="mt-4">
-          <h2 className="text-lg font-semibold text-foreground">Caring for</h2>
-          <p className="mt-1 text-base text-foreground">
-            {patient.fullName} · ID {patient.id}
-          </p>
-          <Link to="/caregiver" className="mt-3 block">
-            <Button variant="care" size="care" className="w-full font-bold">
-              <UserCog className="size-6" aria-hidden="true" /> Open care dashboard
-            </Button>
-          </Link>
-        </SoftCard>
-
         <section className="mt-5">
-          <h2 className="mb-3 text-lg font-semibold text-foreground">My contact details</h2>
+          <h2 className="mb-3 text-lg font-semibold text-foreground">My care circle</h2>
           <ul className="space-y-3">
-            <li>
-              <SoftCard className="flex items-center justify-between gap-3">
-                <span className="text-base text-foreground">{caregiver.phone}</span>
-                <a
-                  href={`tel:${caregiver.phone.replace(/\s/g, "")}`}
-                  aria-label="Call my number"
-                  className="tap-press flex size-14 items-center justify-center rounded-2xl bg-muted text-primary"
-                >
-                  <Phone className="size-6" aria-hidden="true" />
-                </a>
-              </SoftCard>
-            </li>
-            <li>
-              <SoftCard className="flex items-center gap-3">
-                <Mail className="size-6 text-primary" aria-hidden="true" />
-                <span className="text-base text-foreground">{caregiver.email}</span>
-              </SoftCard>
-            </li>
+            {circle.map((c) => (
+              <li key={c.name}>
+                <SoftCard className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-base font-semibold text-foreground">{c.name}</p>
+                    <p className="text-sm text-muted-foreground">{c.relation}</p>
+                  </div>
+                  <a
+                    href={`tel:${c.phone.replace(/\s/g, "")}`}
+                    aria-label={`Call ${c.name}`}
+                    className="tap-press flex size-14 items-center justify-center rounded-2xl bg-muted text-primary"
+                  >
+                    <Phone className="size-6" aria-hidden="true" />
+                  </a>
+                </SoftCard>
+              </li>
+            ))}
           </ul>
         </section>
 
@@ -96,36 +70,51 @@ function CaregiverProfile() {
           <h2 className="mb-1 text-lg font-semibold text-foreground">Preferences</h2>
           <SoftCard className="flex items-center justify-between gap-4">
             <span className="flex items-center gap-3 text-base font-semibold text-foreground">
-              <Bell className="size-6 text-primary" aria-hidden="true" /> Missed reminder alerts
+              <Bell className="size-6 text-primary" aria-hidden="true" /> Reminder alerts
             </span>
             <Switch
               checked={alerts}
               onCheckedChange={(v) => {
                 setAlerts(v);
-                toast(v ? "Alerts on" : "Alerts off");
+                toast(v ? "Reminder alerts on" : "Reminder alerts off");
               }}
-              aria-label="Missed reminder alerts"
+              aria-label="Reminder alerts"
             />
           </SoftCard>
           <SoftCard className="flex items-center justify-between gap-4">
             <span className="flex items-center gap-3 text-base font-semibold text-foreground">
-              <ShieldCheck className="size-6 text-primary" aria-hidden="true" /> Weekly summary email
+              <Type className="size-6 text-primary" aria-hidden="true" /> Larger text
             </span>
             <Switch
-              checked={weekly}
+              checked={largeText}
               onCheckedChange={(v) => {
-                setWeekly(v);
-                toast(v ? "Weekly summary on" : "Weekly summary off");
+                setLargeText(v);
+                toast(v ? "Larger text on" : "Larger text off");
               }}
-              aria-label="Weekly summary email"
+              aria-label="Larger text"
             />
+          </SoftCard>
+          <SoftCard className="flex items-center gap-3 text-base font-semibold text-foreground">
+            <ShieldCheck className="size-6 text-primary" aria-hidden="true" /> Privacy &amp; data
           </SoftCard>
         </section>
 
         <Button
+          variant="softOutline"
+          size="care"
+          className="mt-5 w-full font-bold"
+          onClick={() => {
+            setView("patient");
+            navigate({ to: "/dashboard" });
+          }}
+        >
+          <UserCog className="size-6" aria-hidden="true" /> Switch to patient view
+        </Button>
+
+        <Button
           variant="outline"
           size="care"
-          className="mt-6 w-full font-bold"
+          className="mt-3 w-full font-bold"
           onClick={() => {
             signOut();
             toast("You've been signed out.");

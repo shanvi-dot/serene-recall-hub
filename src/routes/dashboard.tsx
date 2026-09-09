@@ -17,13 +17,13 @@ import { todaysItem, categoryLabel } from "@/lib/daily-news";
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
     meta: [
-      { title: "Today — Lumen Care Patient Home" },
+      { title: "Today — Neuro Mitra" },
       {
         name: "description",
         content:
-          "Your daily Lumen Care home: last game score, latest memory, the next reminder and your weekly cognitive trend.",
+          "Your Neuro Mitra: last game score, latest memory, the next reminder and your weekly cognitive trend.",
       },
-      { property: "og:title", content: "Today — Lumen Care Patient Home" },
+      { property: "og:title", content: "Today — Neuro Mitra" },
       {
         property: "og:description",
         content: "Games, memories, reminders and progress in one gentle daily view.",
@@ -41,12 +41,6 @@ const navCards = [
 ] as const;
 
 function Dashboard() {
-  const navigate = useNavigate();
-  const { role } = useSession();
-
-  useEffect(() => {
-    if (role === "caregiver") navigate({ to: "/caregiver", replace: true });
-  }, [role, navigate]);
 
   const nextReminder = reminders.find((r) => !r.done) ?? reminders[0]!;
   const latest = memories[0]!;

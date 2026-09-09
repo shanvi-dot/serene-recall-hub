@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useSession } from "@/lib/session";
 import { AlertTriangle, BookHeart, Bell, Plus, Smile, UserCog } from "lucide-react";
@@ -33,10 +33,12 @@ const alerts = [
 ];
 
 function CaregiverDashboard() {
-  const { role, signIn } = useSession();
+  const navigate = useNavigate();
+  const { view } = useSession();
+
   useEffect(() => {
-    if (role !== "caregiver") signIn("caregiver");
-  }, [role, signIn]);
+    if (view !== "caregiver") navigate({ to: "/caregiver/unlock", replace: true });
+  }, [view, navigate]);
 
   const done = reminders.filter((r) => r.done).length;
   const adherence = Math.round((done / reminders.length) * 100);

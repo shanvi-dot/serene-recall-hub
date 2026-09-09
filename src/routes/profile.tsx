@@ -36,13 +36,9 @@ const circle = [
 
 function ProfileScreen() {
   const navigate = useNavigate();
-  const { role, signOut } = useSession();
+  const { view, signOut } = useSession();
   const [alerts, setAlerts] = useState(true);
   const [largeText, setLargeText] = useState(false);
-
-  useEffect(() => {
-    if (role === "caregiver") navigate({ to: "/caregiver/profile", replace: true });
-  }, [role, navigate]);
 
   return (
     <MobileShell>

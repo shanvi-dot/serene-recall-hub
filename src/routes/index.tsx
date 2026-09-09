@@ -1,9 +1,11 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { useSession } from "@/lib/session";
+import { supabase } from "@/integrations/supabase/client";
 import authBg from "@/assets/auth-dream.jpg";
 
 export const Route = createFileRoute("/")({
@@ -28,7 +30,26 @@ export const Route = createFileRoute("/")({
 
 function LoginScreen() {
   const navigate = useNavigate();
-  const { signIn } = useSession();
+  const { completeAuth } = useSession();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    setSubmitting(true);
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    setSubmitting(false);
+
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+
+    completeAuth();
+    toast.success("Welcome back!");
+    navigate({ to: "/dashboard" });
+  }
 
   return (
     <main className="relative min-h-dvh w-full overflow-hidden">
@@ -49,15 +70,7 @@ function LoginScreen() {
           </p>
         </div>
 
-        <form
-          className="glass-card space-y-4 rounded-3xl p-6"
-          onSubmit={(e) => {
-            e.preventDefault();
-            signIn("patient");
-            toast.success("Welcome back!");
-            navigate({ to: "/dashboard" });
-          }}
-        >
+        <form className="glass-card space-y-4 rounded-3xl p-6" onSubmit={handleSubmit}>
           <div className="space-y-2">
             <Label htmlFor="identifier" className="text-base">
               Email or phone
@@ -66,6 +79,8 @@ function LoginScreen() {
               id="identifier"
               required
               placeholder="eleanor@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="min-h-14 rounded-2xl bg-card text-base"
             />
           </div>
@@ -79,6 +94,8 @@ function LoginScreen() {
               type="password"
               required
               placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="min-h-14 rounded-2xl bg-card text-base"
             />
           </div>
@@ -91,8 +108,8 @@ function LoginScreen() {
             Forgot Password?
           </button>
 
-          <Button type="submit" variant="gold" size="care" className="w-full font-bold">
-            Log In
+          <Button type="submit" variant="gold" size="care" className="w-full font-bold" disabled={submitting}>
+            {submitting ? "Logging in…" : "Log In"}
           </Button>
 
           <p className="text-center text-base text-foreground">
