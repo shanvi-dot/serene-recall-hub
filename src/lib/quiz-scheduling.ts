@@ -1,4 +1,4 @@
-import { supabase } from './supabase';
+import { supabase } from '@/integrations/supabase/client';
 
 const MIN_DELAY_DAYS = 2;
 const MAX_DELAY_DAYS = 7;

@@ -1,5 +1,5 @@
 import { db } from './db';
-import { supabase } from './supabase'; // created automatically once Supabase is connected
+import { supabase } from '@/integrations/supabase/client';
 
 export async function syncPendingWrites() {
   if (!navigator.onLine) return;
