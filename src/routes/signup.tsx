@@ -13,10 +13,10 @@ import authBg from "@/assets/auth-dream.jpg";
 export const Route = createFileRoute("/signup")({
   head: () => ({
     meta: [
-      { title: "Create your Lumen Care account" },
-      { name: "description", content: "Create a Lumen Care caregiver account and start capturing memories, playing gentle games and tracking daily care." },
-      { property: "og:title", content: "Create your Lumen Care account" },
-      { property: "og:description", content: "Set up your Lumen Care account in under a minute." },
+      { title: "Create your Neuro Mitra account" },
+      { name: "description", content: "Create a Neuro Mitra caregiver account and start capturing memories, playing gentle games and tracking daily care." },
+      { property: "og:title", content: "Create your Neuro Mitra account" },
+      { property: "og:description", content: "Set up your Neuro Mitra account in under a minute." },
     ],
   }),
   component: SignUpScreen,
@@ -71,7 +71,7 @@ function SignUpScreen() {
       return;
     }
     completeAuth();
-    toast.success("Account created. Welcome to Lumen Care!");
+    toast.success("Account created. Welcome to Neuro Mitra!");
     navigate({ to: "/dashboard" });
   }
 

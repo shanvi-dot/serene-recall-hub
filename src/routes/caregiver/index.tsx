@@ -11,13 +11,13 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/caregiver/")({
   head: () => ({
     meta: [
-      { title: "Caregiver Dashboard — Lumen Care" },
+      { title: "Caregiver Dashboard — Neuro Mitra" },
       {
         name: "description",
         content:
           "Caregiver view: adherence to reminders, cognitive and mood trends, recent memories and gentle alerts for Eleanor.",
       },
-      { property: "og:title", content: "Caregiver Dashboard — Lumen Care" },
+      { property: "og:title", content: "Caregiver Dashboard — Neuro Mitra" },
       {
         property: "og:description",
         content: "Reminder adherence, cognitive and mood trends, and gentle alerts at a glance.",

@@ -6,13 +6,13 @@ import { SoftCard, Pill } from "@/components/soft-card";
 export const Route = createFileRoute("/games/")({
   head: () => ({
     meta: [
-      { title: "Gentle Memory Games — Lumen Care" },
+      { title: "Gentle Memory Games — Neuro Mitra" },
       {
         name: "description",
         content:
           "Two calm cognitive games: Memory Match, where you turn over cards to find pairs, and Sequence Master for colour grid patterns.",
       },
-      { property: "og:title", content: "Gentle Memory Games — Lumen Care" },
+      { property: "og:title", content: "Gentle Memory Games — Neuro Mitra" },
       {
         property: "og:description",
         content: "Memory Match card pairs and Sequence Master colour patterns — calm and gentle.",

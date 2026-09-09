@@ -8,12 +8,12 @@ import { todayLabel } from "@/lib/care-data";
 export const Route = createFileRoute("/daily-news")({
   head: () => ({
     meta: [
-      { title: "Daily News — Lumen Care" },
+      { title: "Daily News — Neuro Mitra" },
       {
         name: "description",
         content: "One gentle news story, fact or tip for today, refreshed daily.",
       },
-      { property: "og:title", content: "Daily News — Lumen Care" },
+      { property: "og:title", content: "Daily News — Neuro Mitra" },
       {
         property: "og:description",
         content: "One gentle news story, fact or tip for today, refreshed daily.",

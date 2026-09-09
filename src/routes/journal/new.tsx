@@ -12,13 +12,13 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/journal/new")({
   head: () => ({
     meta: [
-      { title: "Add a Memory — Lumen Care" },
+      { title: "Add a Memory — Neuro Mitra" },
       {
         name: "description",
         content:
           "Capture a new memory: add a photo, say or type what happened, note who was there and how it felt.",
       },
-      { property: "og:title", content: "Add a Memory — Lumen Care" },
+      { property: "og:title", content: "Add a Memory — Neuro Mitra" },
       {
         property: "og:description",
         content: "Add a photo, a short note, who was there and how the moment felt.",

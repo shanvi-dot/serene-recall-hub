@@ -9,13 +9,13 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/games/sequence")({
   head: () => ({
     meta: [
-      { title: "Sequence Master — Lumen Care Game" },
+      { title: "Sequence Master — Neuro Mitra Game" },
       {
         name: "description",
         content:
           "Sequence Master: watch a soft colour pattern light up on the grid, then tap it back in the same order across five gentle levels.",
       },
-      { property: "og:title", content: "Sequence Master — Lumen Care Game" },
+      { property: "og:title", content: "Sequence Master — Neuro Mitra Game" },
       {
         property: "og:description",
         content: "Watch a colour pattern on the grid, then tap it back in order.",

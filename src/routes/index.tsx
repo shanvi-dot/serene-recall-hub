@@ -11,13 +11,13 @@ import authBg from "@/assets/auth-dream.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Lumen Care — Gentle Dementia Care Companion" },
+      { title: "Neuro Mitra — Gentle Dementia Care Companion" },
       {
         name: "description",
         content:
-          "Sign in to Lumen Care: memory games, a photo journal, daily reminders and caregiver insights designed for people living with dementia.",
+          "Sign in to Neuro Mitra: memory games, a photo journal, daily reminders and caregiver insights designed for people living with dementia.",
       },
-      { property: "og:title", content: "Lumen Care — Gentle Dementia Care Companion" },
+      { property: "og:title", content: "Neuro Mitra — Gentle Dementia Care Companion" },
       {
         property: "og:description",
         content:
@@ -64,7 +64,7 @@ function LoginScreen() {
       <div className="relative mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center px-6 py-10">
         <div className="mb-6 text-center">
           <p className="text-lg font-semibold text-primary-foreground drop-shadow">Welcome to</p>
-          <h1 className="text-4xl font-bold text-primary-foreground drop-shadow">Lumen Care</h1>
+          <h1 className="text-4xl font-bold text-primary-foreground drop-shadow">Neuro Mitra</h1>
           <p className="mt-2 text-base text-primary-foreground/90 drop-shadow">
             A calm place for memories, gentle games and daily care.
           </p>

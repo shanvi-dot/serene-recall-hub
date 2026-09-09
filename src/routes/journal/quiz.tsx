@@ -10,13 +10,13 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/journal/quiz")({
   head: () => ({
     meta: [
-      { title: "Weekly Memory Quiz — Lumen Care" },
+      { title: "Weekly Memory Quiz — Neuro Mitra" },
       {
         name: "description",
         content:
           "A gentle end-of-week quiz about the memories saved this week, one calm question at a time.",
       },
-      { property: "og:title", content: "Weekly Memory Quiz — Lumen Care" },
+      { property: "og:title", content: "Weekly Memory Quiz — Neuro Mitra" },
       {
         property: "og:description",
         content: "One gentle question at a time about this week's memories.",

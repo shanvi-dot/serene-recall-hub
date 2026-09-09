@@ -80,14 +80,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lumen Care — Gentle Dementia Care Companion" },
+      { title: "Neuro Mitra — Gentle Dementia Care Companion" },
       {
         name: "description",
         content:
-          "Lumen Care: memory games, a photo journal, daily reminders and caregiver insights for people living with dementia.",
+          "Neuro Mitra: memory games, a photo journal, daily reminders and caregiver insights for people living with dementia.",
       },
-      { name: "author", content: "Lumen Care" },
-      { property: "og:title", content: "Lumen Care — Gentle Dementia Care Companion" },
+      { name: "author", content: "Neuro Mitra" },
+      { property: "og:title", content: "Neuro Mitra — Gentle Dementia Care Companion" },
       {
         property: "og:description",
         content: "Memory games, a photo journal, daily reminders and caregiver insights.",

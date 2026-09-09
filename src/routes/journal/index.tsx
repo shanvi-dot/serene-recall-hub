@@ -7,13 +7,13 @@ import { memories, sentimentLabel } from "@/lib/care-data";
 export const Route = createFileRoute("/journal/")({
   head: () => ({
     meta: [
-      { title: "Memory Journal — Lumen Care" },
+      { title: "Memory Journal — Neuro Mitra" },
       {
         name: "description",
         content:
           "A gentle photo journal of recent moments: who was there, where it happened and how it felt.",
       },
-      { property: "og:title", content: "Memory Journal — Lumen Care" },
+      { property: "og:title", content: "Memory Journal — Neuro Mitra" },
       {
         property: "og:description",
         content: "Photos and short notes of recent moments, kept simple and calm.",

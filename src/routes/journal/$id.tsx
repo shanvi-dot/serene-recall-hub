@@ -13,15 +13,15 @@ export const Route = createFileRoute("/journal/$id")({
   head: ({ loaderData }) => {
     if (!loaderData) {
       return {
-        meta: [{ title: "Memory not found — Lumen Care" }, { name: "robots", content: "noindex" }],
+        meta: [{ title: "Memory not found — Neuro Mitra" }, { name: "robots", content: "noindex" }],
       };
     }
     const { memory } = loaderData;
     return {
       meta: [
-        { title: `${memory.title} — Lumen Care Memory` },
+        { title: `${memory.title} — Neuro Mitra Memory` },
         { name: "description", content: memory.description.slice(0, 155) },
-        { property: "og:title", content: `${memory.title} — Lumen Care Memory` },
+        { property: "og:title", content: `${memory.title} — Neuro Mitra Memory` },
         { property: "og:description", content: memory.description.slice(0, 155) },
         { property: "og:image", content: memory.image },
         { name: "twitter:image", content: memory.image },

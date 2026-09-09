@@ -15,13 +15,13 @@ import { scopeKey, useSession } from "@/lib/session";
 export const Route = createFileRoute("/reminders")({
   head: () => ({
     meta: [
-      { title: "Daily Reminders — Lumen Care" },
+      { title: "Daily Reminders — Neuro Mitra" },
       {
         name: "description",
         content:
           "Gentle daily reminders for medication, water, meals and family calls, with big tap targets and a single on/off switch.",
       },
-      { property: "og:title", content: "Daily Reminders — Lumen Care" },
+      { property: "og:title", content: "Daily Reminders — Neuro Mitra" },
       {
         property: "og:description",
         content: "Medication, water, meals and family calls — gently reminded, easily ticked off.",

@@ -8,13 +8,13 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/games/memory")({
   head: () => ({
     meta: [
-      { title: "Memory Match — Lumen Care Game" },
+      { title: "Memory Match — Neuro Mitra Game" },
       {
         name: "description",
         content:
           "Memory Match: turn over two cards at a time to find matching pairs. Pairs stay open, moves are counted, and a gentle message greets you at the end.",
       },
-      { property: "og:title", content: "Memory Match — Lumen Care Game" },
+      { property: "og:title", content: "Memory Match — Neuro Mitra Game" },
       {
         property: "og:description",
         content: "Turn over two cards at a time and find every matching pair.",

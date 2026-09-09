@@ -12,13 +12,13 @@ import { useSession } from "@/lib/session";
 export const Route = createFileRoute("/profile")({
   head: () => ({
     meta: [
-      { title: "My Profile — Lumen Care" },
+      { title: "My Profile — Neuro Mitra" },
       {
         name: "description",
         content:
-          "Manage your Lumen Care profile: care circle contacts, reminder alerts, larger text and emergency help.",
+          "Manage your Neuro Mitra profile: care circle contacts, reminder alerts, larger text and emergency help.",
       },
-      { property: "og:title", content: "My Profile — Lumen Care" },
+      { property: "og:title", content: "My Profile — Neuro Mitra" },
       {
         property: "og:description",
         content: "Care circle contacts, reminder alerts, larger text and emergency help.",

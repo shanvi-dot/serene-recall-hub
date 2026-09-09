@@ -6,13 +6,13 @@ import { weeklyScores, moodTrend } from "@/lib/care-data";
 export const Route = createFileRoute("/progress")({
   head: () => ({
     meta: [
-      { title: "My Progress — Lumen Care" },
+      { title: "My Progress — Neuro Mitra" },
       {
         name: "description",
         content:
-          "See your weekly cognitive score, mood trend and gentle activity highlights inside Lumen Care.",
+          "See your weekly cognitive score, mood trend and gentle activity highlights inside Neuro Mitra.",
       },
-      { property: "og:title", content: "My Progress — Lumen Care" },
+      { property: "og:title", content: "My Progress — Neuro Mitra" },
       {
         property: "og:description",
         content: "Weekly cognitive score, mood trend and activity highlights.",
