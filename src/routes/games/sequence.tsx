@@ -160,7 +160,7 @@ function SequenceGame() {
                 disabled={phase !== "repeat"}
                 aria-label={`Box ${cell + 1}`}
                 className={`tap-press aspect-square rounded-2xl transition-opacity duration-300 ${tints[cell]} ${
-                  flash === cell ? "opacity-100 ring-4 ring-primary" : "opacity-55"
+                  flash === cell ? "opacity-100 ring-4 ring-white" : "opacity-70"
                 }`}
               />
             ))}

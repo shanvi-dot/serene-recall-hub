@@ -37,10 +37,6 @@ function SignUpScreen() {
 
   async function handleStepOne(e: FormEvent) {
     e.preventDefault();
-    if (!agreed) {
-      toast.error("Please accept the Terms & Privacy Policy.");
-      return;
-    }
     setSubmitting(true);
     const { error } = await supabase.auth.signUp({ email, password });
     setSubmitting(false);
