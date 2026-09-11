@@ -89,10 +89,6 @@ function SignUpScreen() {
               <Label htmlFor="new-password" className="text-base">Password</Label>
               <Input id="new-password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="min-h-14 rounded-2xl bg-card text-base" />
             </div>
-            <Label htmlFor="terms" className="flex items-start gap-3 rounded-2xl bg-muted/60 p-4 text-base leading-relaxed">
-              <Checkbox id="terms" checked={agreed} onCheckedChange={(v) => setAgreed(v === true)} className="mt-1 size-6" />
-              <span>I agree to the Terms of Service and Privacy Policy.</span>
-            </Label>
             <Button type="submit" variant="gold" size="care" className="w-full font-bold" disabled={submitting}>
               {submitting ? "Creating account…" : "Continue"}
             </Button>
