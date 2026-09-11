@@ -1,7 +1,11 @@
+// Fallback/demo data only — real patient data comes from Supabase.
+// If you ever see "Friend" on the dashboard, it means the app could not
+// find a caregiver/patient row for the logged-in user (check the browser
+// console — the dashboard logs exactly why).
 export const patient = {
-  name: "Eleanor",
-  fullName: "Eleanor Hayes",
-  id: "PT-1042",
+  name: "Friend",
+  fullName: "Friend",
+  id: "PT-DEMO",
 };
 
 export const caregiver = {

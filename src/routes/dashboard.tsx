@@ -35,16 +35,61 @@ type LatestJournal = { id: string; content: string; event_time: string } | null;
 type NextReminder = { label: string; scheduled_time: string } | null;
 
 function Dashboard() {
-  const [patientName, setPatientName] = useState(fallbackPatient.name);
+  const [patientName, setPatientName] = useState<string | null>(null);
   const [latest, setLatest] = useState<LatestJournal>(null);
   const [nextReminder, setNextReminder] = useState<NextReminder>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
-      const { data: patientRow } = await supabase.from("patients").select("name").limit(1).maybeSingle();
-      if (patientRow?.name) setPatientName(patientRow.name);
+      // 1. Who is logged in right now?
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
 
+      if (userError || !user) {
+        console.error("No authenticated user found:", userError);
+        setPatientName(fallbackPatient.name);
+      } else {
+        // 2. Find this caregiver's family_id
+        const { data: caregiverRow, error: caregiverError } = await supabase
+          .from("caregivers")
+          .select("family_id")
+          .eq("auth_user_id", user.id)
+          .maybeSingle();
+
+        if (caregiverError) {
+          console.error("Error fetching caregiver row:", caregiverError);
+        }
+
+        if (!caregiverRow) {
+          console.warn(
+            "No caregiver row found for this auth user. This usually means signup never called create_family_account()."
+          );
+          setPatientName(fallbackPatient.name);
+        } else {
+          // 3. Get the patient's name for that family
+          const { data: patientRow, error: patientError } = await supabase
+            .from("patients")
+            .select("name")
+            .eq("family_id", caregiverRow.family_id)
+            .maybeSingle();
+
+          if (patientError) {
+            console.error("Error fetching patient row:", patientError);
+          }
+
+          if (patientRow?.name) {
+            setPatientName(patientRow.name);
+          } else {
+            console.warn("No patient row found for family_id:", caregiverRow.family_id);
+            setPatientName(fallbackPatient.name);
+          }
+        }
+      }
+
+      // --- rest of dashboard data (unchanged logic) ---
       const { data: journalRow } = await supabase
         .from("journal_entries")
         .select("id, content, event_time")
@@ -70,17 +115,24 @@ function Dashboard() {
 
   const trend = weeklyScores.at(-1)!.score - weeklyScores[0]!.score;
   const daily = todaysItem();
+  const displayName = patientName ?? fallbackPatient.name;
 
   return (
     <MobileShell>
       <main>
         <header className="mb-6 flex items-center gap-4">
           <div className="flex size-14 items-center justify-center rounded-full bg-primary text-2xl font-bold text-primary-foreground">
-            {patientName.charAt(0)}
+            {loading ? "…" : displayName.charAt(0)}
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">
-              {greeting()}, {patientName}
+              {loading ? (
+                <>{greeting()}…</>
+              ) : (
+                <>
+                  {greeting()}, {displayName}
+                </>
+              )}
             </h1>
             <p className="text-base text-muted-foreground">{todayLabel()}</p>
           </div>

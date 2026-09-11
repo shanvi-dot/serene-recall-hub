@@ -26,7 +26,7 @@ function SignUpScreen() {
   const navigate = useNavigate();
   const { completeAuth } = useSession();
   const [step, setStep] = useState<1 | 2>(1);
-  
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [caregiverName, setCaregiverName] = useState("");
@@ -38,12 +38,25 @@ function SignUpScreen() {
   async function handleStepOne(e: FormEvent) {
     e.preventDefault();
     setSubmitting(true);
-    const { error } = await supabase.auth.signUp({ email, password });
+    const { data, error } = await supabase.auth.signUp({ email, password });
     setSubmitting(false);
+
     if (error) {
       toast.error(error.message);
       return;
     }
+
+    // If email confirmation is required in your Supabase project, signUp()
+    // succeeds but returns NO session. That means auth.uid() is null and
+    // create_family_account would attach the caregiver row to nobody.
+    if (!data.session) {
+      toast.error(
+        "Check your email to confirm your account, then log in — you'll finish setup right after."
+      );
+      navigate({ to: "/" });
+      return;
+    }
+
     setStep(2);
   }
 
@@ -53,7 +66,26 @@ function SignUpScreen() {
       toast.error("PIN must be at least 4 digits.");
       return;
     }
+
     setSubmitting(true);
+
+    // Safety net: confirm we actually have an authenticated session before
+    // calling the RPC. Without this, auth_user_id can end up NULL and the
+    // dashboard will never find the patient's name.
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    if (!session) {
+      const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+      if (signInError) {
+        setSubmitting(false);
+        toast.error("Please confirm your email first, then log in to finish setup.");
+        navigate({ to: "/" });
+        return;
+      }
+    }
+
     const pinHash = await hashPin(pin);
     const { error } = await supabase.rpc("create_family_account", {
       p_caregiver_name: caregiverName,
@@ -61,11 +93,14 @@ function SignUpScreen() {
       p_patient_name: patientName,
       p_pin_hash: pinHash,
     });
+
     setSubmitting(false);
+
     if (error) {
       toast.error(error.message);
       return;
     }
+
     completeAuth();
     toast.success("Account created. Welcome to Neuro Mitra!");
     navigate({ to: "/dashboard" });
