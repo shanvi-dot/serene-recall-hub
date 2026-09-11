@@ -96,19 +96,7 @@ function ProfileScreen() {
               aria-label="Reminder alerts"
             />
           </SoftCard>
-          <SoftCard className="flex items-center justify-between gap-4">
-            <span className="flex items-center gap-3 text-base font-semibold text-foreground">
-              <Type className="size-6 text-primary" aria-hidden="true" /> Larger text
-            </span>
-            <Switch
-              checked={largeText}
-              onCheckedChange={(v) => {
-                setLargeText(v);
-                toast(v ? "Larger text on" : "Larger text off");
-              }}
-              aria-label="Larger text"
-            />
-          </SoftCard>
+          
           <SoftCard className="flex items-center gap-3 text-base font-semibold text-foreground">
             <ShieldCheck className="size-6 text-primary" aria-hidden="true" /> Privacy &amp; data
           </SoftCard>

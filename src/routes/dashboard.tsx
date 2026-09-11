@@ -1,16 +1,14 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
-import { useSession } from "@/lib/session";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { Gamepad2, BookHeart, Bell, TrendingUp, ChevronRight, Newspaper } from "lucide-react";
 import { MobileShell } from "@/components/mobile-shell";
 import { SoftCard, Pill } from "@/components/soft-card";
+import { supabase } from "@/integrations/supabase/client";
 import {
   greeting,
   todayLabel,
-  memories,
-  reminders,
   weeklyScores,
-  patient,
+  patient as fallbackPatient,
 } from "@/lib/care-data";
 import { todaysItem, categoryLabel } from "@/lib/daily-news";
 
@@ -18,16 +16,9 @@ export const Route = createFileRoute("/dashboard")({
   head: () => ({
     meta: [
       { title: "Today — Neuro Mitra" },
-      {
-        name: "description",
-        content:
-          "Your Neuro Mitra: last game score, latest memory, the next reminder and your weekly cognitive trend.",
-      },
+      { name: "description", content: "Your Neuro Mitra: last game score, latest memory, the next reminder and your weekly cognitive trend." },
       { property: "og:title", content: "Today — Neuro Mitra" },
-      {
-        property: "og:description",
-        content: "Games, memories, reminders and progress in one gentle daily view.",
-      },
+      { property: "og:description", content: "Games, memories, reminders and progress in one gentle daily view." },
     ],
   }),
   component: Dashboard,
@@ -40,10 +31,43 @@ const navCards = [
   { to: "/progress", label: "Progress", icon: TrendingUp, tint: "bg-success/50" },
 ] as const;
 
-function Dashboard() {
+type LatestJournal = { id: string; content: string; event_time: string } | null;
+type NextReminder = { label: string; scheduled_time: string } | null;
 
-  const nextReminder = reminders.find((r) => !r.done) ?? reminders[0]!;
-  const latest = memories[0]!;
+function Dashboard() {
+  const [patientName, setPatientName] = useState(fallbackPatient.name);
+  const [latest, setLatest] = useState<LatestJournal>(null);
+  const [nextReminder, setNextReminder] = useState<NextReminder>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function load() {
+      const { data: patientRow } = await supabase.from("patients").select("name").limit(1).maybeSingle();
+      if (patientRow?.name) setPatientName(patientRow.name);
+
+      const { data: journalRow } = await supabase
+        .from("journal_entries")
+        .select("id, content, event_time")
+        .order("event_time", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      setLatest(journalRow ?? null);
+
+      const { data: reminderRows } = await supabase
+        .from("reminders")
+        .select("label, scheduled_time")
+        .order("scheduled_time", { ascending: true });
+      if (reminderRows && reminderRows.length > 0) {
+        const now = new Date().toTimeString().slice(0, 8);
+        const upcoming = reminderRows.find((r) => r.scheduled_time > now);
+        setNextReminder(upcoming ?? reminderRows[0]);
+      }
+
+      setLoading(false);
+    }
+    load();
+  }, []);
+
   const trend = weeklyScores.at(-1)!.score - weeklyScores[0]!.score;
   const daily = todaysItem();
 
@@ -52,11 +76,11 @@ function Dashboard() {
       <main>
         <header className="mb-6 flex items-center gap-4">
           <div className="flex size-14 items-center justify-center rounded-full bg-primary text-2xl font-bold text-primary-foreground">
-            {patient.name.charAt(0)}
+            {patientName.charAt(0)}
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">
-              {greeting()}, {patient.name}
+              {greeting()}, {patientName}
             </h1>
             <p className="text-base text-muted-foreground">{todayLabel()}</p>
           </div>
@@ -95,26 +119,32 @@ function Dashboard() {
 
           <SoftCard>
             <h2 className="mb-3 text-lg font-semibold">Recent memory</h2>
-            <Link to="/journal/$id" params={{ id: latest.id }} className="flex items-center gap-4">
-              <img
-                src={latest.image}
-                alt={latest.title}
-                loading="lazy"
-                className="size-20 shrink-0 rounded-2xl object-cover"
-              />
-              <div>
-                <p className="text-base font-semibold text-foreground">{latest.title}</p>
-                <p className="text-sm text-muted-foreground">{latest.date}</p>
-              </div>
-            </Link>
+            {loading ? (
+              <p className="text-base text-muted-foreground">Loading…</p>
+            ) : latest ? (
+              <Link to="/journal/$id" params={{ id: latest.id }} className="block">
+                <p className="text-base font-semibold text-foreground line-clamp-2">{latest.content}</p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {new Date(latest.event_time).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
+                </p>
+              </Link>
+            ) : (
+              <p className="text-base text-muted-foreground">No journal entries yet.</p>
+            )}
           </SoftCard>
 
           <SoftCard>
             <h2 className="text-lg font-semibold">Next reminder</h2>
-            <p className="mt-2 flex items-baseline gap-3">
-              <span className="text-3xl font-bold text-primary">{nextReminder.time}</span>
-              <span className="text-base text-foreground">{nextReminder.text}</span>
-            </p>
+            {loading ? (
+              <p className="mt-2 text-base text-muted-foreground">Loading…</p>
+            ) : nextReminder ? (
+              <p className="mt-2 flex items-baseline gap-3">
+                <span className="text-3xl font-bold text-primary">{nextReminder.scheduled_time.slice(0, 5)}</span>
+                <span className="text-base text-foreground">{nextReminder.label}</span>
+              </p>
+            ) : (
+              <p className="mt-2 text-base text-muted-foreground">No reminders set yet.</p>
+            )}
           </SoftCard>
 
           <SoftCard>
@@ -125,11 +155,7 @@ function Dashboard() {
             <ul className="flex h-32 items-end justify-between gap-2">
               {weeklyScores.map((d) => (
                 <li key={d.day} className="flex flex-1 flex-col items-center gap-2">
-                  <div
-                    className="w-full rounded-t-xl bg-primary/80"
-                    style={{ height: `${d.score}%` }}
-                    aria-hidden="true"
-                  />
+                  <div className="w-full rounded-t-xl bg-primary/80" style={{ height: `${d.score}%` }} aria-hidden="true" />
                   <span className="text-sm text-muted-foreground">{d.day}</span>
                   <span className="sr-only">{d.score} points</span>
                 </li>
