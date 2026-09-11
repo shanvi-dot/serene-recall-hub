@@ -4,9 +4,13 @@ import { Gamepad2, BookHeart, Bell, TrendingUp, ChevronRight, Newspaper } from "
 import { MobileShell } from "@/components/mobile-shell";
 import { SoftCard, Pill } from "@/components/soft-card";
 import { supabase } from "@/integrations/supabase/client";
-import { greeting, todayLabel, weeklyScores } from "@/lib/care-data";
+import {
+  greeting,
+  todayLabel,
+  weeklyScores,
+  patient as fallbackPatient,
+} from "@/lib/care-data";
 import { todaysItem, categoryLabel } from "@/lib/daily-news";
-import { useFamilyData } from "@/lib/use-family-data";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -31,13 +35,29 @@ type LatestJournal = { id: string; content: string; event_time: string } | null;
 type NextReminder = { label: string; scheduled_time: string } | null;
 
 function Dashboard() {
-  const { loading: familyLoading, patientName } = useFamilyData();
+  const [patientName, setPatientName] = useState(fallbackPatient.name);
   const [latest, setLatest] = useState<LatestJournal>(null);
   const [nextReminder, setNextReminder] = useState<NextReminder>(null);
-  const [loadingExtras, setLoadingExtras] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
+      // Make sure the auth session has finished loading from storage before
+      // querying — otherwise this can fire with no session yet, RLS returns
+      // zero rows, and it looks like "no patient" even when the data exists.
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        console.warn("Dashboard loaded with no active session yet.");
+      }
+
+      const { data: patientRow, error: patientErr } = await supabase
+        .from("patients")
+        .select("name")
+        .limit(1)
+        .maybeSingle();
+      if (patientErr) console.error("Error fetching patient:", patientErr);
+      if (patientRow?.name) setPatientName(patientRow.name);
+
       const { data: journalRow } = await supabase
         .from("journal_entries")
         .select("id, content, event_time")
@@ -56,32 +76,24 @@ function Dashboard() {
         setNextReminder(upcoming ?? reminderRows[0]!);
       }
 
-      setLoadingExtras(false);
+      setLoading(false);
     }
     load();
   }, []);
 
   const trend = weeklyScores.at(-1)!.score - weeklyScores[0]!.score;
   const daily = todaysItem();
-  const displayName = patientName ?? "there";
-  const loading = familyLoading || loadingExtras;
 
   return (
     <MobileShell>
       <main>
         <header className="mb-6 flex items-center gap-4">
           <div className="flex size-14 items-center justify-center rounded-full bg-primary text-2xl font-bold text-primary-foreground">
-            {familyLoading ? "…" : displayName.charAt(0)}
+            {patientName.charAt(0)}
           </div>
           <div>
             <h1 className="text-2xl font-bold text-foreground">
-              {familyLoading ? (
-                <>{greeting()}…</>
-              ) : (
-                <>
-                  {greeting()}, {displayName}
-                </>
-              )}
+              {greeting()}, {patientName}
             </h1>
             <p className="text-base text-muted-foreground">{todayLabel()}</p>
           </div>
