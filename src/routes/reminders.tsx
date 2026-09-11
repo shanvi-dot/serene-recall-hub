@@ -52,7 +52,7 @@ function RemindersScreen() {
   return (
     <MobileShell>
       <main>
-        <ScreenHeader title="Daily Reminders" subtitle={role === "caregiver" ? `${patient.name}\u2019s day, from your account` : "Small nudges through the day"} />
+        <ScreenHeader title="Daily Reminders" subtitle={view === "caregiver" ? `${patient.name}\u2019s day, from your account` : "Small nudges through the day"} />
 
         <SoftCard className="mb-5">
           <Label htmlFor="all-reminders" className="flex items-center justify-between text-lg font-semibold">
