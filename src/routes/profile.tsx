@@ -1,11 +1,12 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Bell, LogOut, Phone, ShieldCheck, Type } from "lucide-react";
+import { Bell, LogOut, ChevronRight, ShieldCheck } from "lucide-react";
 import { MobileShell, ScreenHeader } from "@/components/mobile-shell";
 import { SoftCard, Pill } from "@/components/soft-card";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { patient } from "@/lib/care-data";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useSession } from "@/lib/session";
 
@@ -16,29 +17,68 @@ export const Route = createFileRoute("/profile")({
       {
         name: "description",
         content:
-          "Manage your Neuro Mitra profile: care circle contacts, reminder alerts, larger text and emergency help.",
+          "Manage your Neuro Mitra profile: caregiver access, reminder alerts, larger text and emergency help.",
       },
       { property: "og:title", content: "My Profile — Neuro Mitra" },
       {
         property: "og:description",
-        content: "Care circle contacts, reminder alerts, larger text and emergency help.",
+        content: "Caregiver access, reminder alerts, larger text and emergency help.",
       },
     ],
   }),
   component: ProfileScreen,
 });
 
-const circle = [
-  { name: "Mary Hayes", relation: "Daughter · Primary caregiver", phone: "07700 900123" },
-  { name: "Robert Hayes", relation: "Son", phone: "07700 900456" },
-  { name: "Dr. Amara Osei", relation: "GP", phone: "01273 900789" },
-];
+type CaregiverRow = { id: string; name: string };
 
 function ProfileScreen() {
   const navigate = useNavigate();
-  const { view, signOut } = useSession();
+  const { signOut } = useSession();
   const [alerts, setAlerts] = useState(true);
-  const [largeText, setLargeText] = useState(false);
+  const [caregivers, setCaregivers] = useState<CaregiverRow[]>([]);
+  const [loadingCaregivers, setLoadingCaregivers] = useState(true);
+
+  useEffect(() => {
+    async function load() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        setLoadingCaregivers(false);
+        return;
+      }
+
+      const { data: myCaregiverRow, error: myCaregiverError } = await supabase
+        .from("caregivers")
+        .select("family_id")
+        .eq("auth_user_id", user.id)
+        .maybeSingle();
+
+      if (myCaregiverError) {
+        console.error("Error fetching current caregiver:", myCaregiverError);
+      }
+
+      if (!myCaregiverRow) {
+        setLoadingCaregivers(false);
+        return;
+      }
+
+      const { data: caregiverRows, error: caregiverRowsError } = await supabase
+        .from("caregivers")
+        .select("id, name")
+        .eq("family_id", myCaregiverRow.family_id)
+        .order("created_at", { ascending: true });
+
+      if (caregiverRowsError) {
+        console.error("Error fetching family caregivers:", caregiverRowsError);
+      }
+
+      setCaregivers(caregiverRows ?? []);
+      setLoadingCaregivers(false);
+    }
+    load();
+  }, []);
 
   return (
     <MobileShell>
@@ -59,26 +99,34 @@ function ProfileScreen() {
         </SoftCard>
 
         <section className="mt-5">
-          <h2 className="mb-3 text-lg font-semibold text-foreground">My care circle</h2>
-          <ul className="space-y-3">
-            {circle.map((c) => (
-              <li key={c.name}>
-                <SoftCard className="flex items-center justify-between gap-3">
-                  <div>
-                    <p className="text-base font-semibold text-foreground">{c.name}</p>
-                    <p className="text-sm text-muted-foreground">{c.relation}</p>
-                  </div>
-                  <a
-                    href={`tel:${c.phone.replace(/\s/g, "")}`}
-                    aria-label={`Call ${c.name}`}
-                    className="tap-press flex size-14 items-center justify-center rounded-2xl bg-muted text-primary"
-                  >
-                    <Phone className="size-6" aria-hidden="true" />
-                  </a>
-                </SoftCard>
-              </li>
-            ))}
-          </ul>
+          <h2 className="mb-3 text-lg font-semibold text-foreground">Caregiver</h2>
+          {loadingCaregivers ? (
+            <p className="text-base text-muted-foreground">Loading…</p>
+          ) : caregivers.length === 0 ? (
+            <p className="text-base text-muted-foreground">No caregiver found for this account.</p>
+          ) : (
+            <ul className="space-y-3">
+              {caregivers.map((c) => (
+                <li key={c.id}>
+                  <SoftCard className="flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="flex size-12 items-center justify-center rounded-full bg-primary text-lg font-bold text-primary-foreground">
+                        {c.name.charAt(0)}
+                      </div>
+                      <p className="text-base font-semibold text-foreground">{c.name}</p>
+                    </div>
+                    <Link
+                      to="/caregiver-unlock/$caregiverId"
+                      params={{ caregiverId: c.id }}
+                      className="tap-press flex min-h-12 items-center gap-1 rounded-2xl bg-muted px-4 text-base font-semibold text-primary"
+                    >
+                      Open <ChevronRight className="size-5" aria-hidden="true" />
+                    </Link>
+                  </SoftCard>
+                </li>
+              ))}
+            </ul>
+          )}
         </section>
 
         <section className="mt-5 space-y-3">
@@ -96,7 +144,7 @@ function ProfileScreen() {
               aria-label="Reminder alerts"
             />
           </SoftCard>
-          
+
           <SoftCard className="flex items-center gap-3 text-base font-semibold text-foreground">
             <ShieldCheck className="size-6 text-primary" aria-hidden="true" /> Privacy &amp; data
           </SoftCard>
@@ -106,7 +154,7 @@ function ProfileScreen() {
           variant="gold"
           size="care"
           className="mt-6 w-full font-bold"
-          onClick={() => toast("Emergency contact called: Mary Hayes")}
+          onClick={() => toast("Emergency contact called.")}
         >
           Emergency help
         </Button>
