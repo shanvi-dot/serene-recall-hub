@@ -25,23 +25,29 @@ export const Route = createFileRoute("/games/sequence")({
   component: SequenceGame,
 });
 
+/**
+ * Distinct, high-contrast colours — one per box, never repeated in a round.
+ * Rounds 1–2 use the first 9; later rounds add clearly different dark/light
+ * shades (dark green vs light green, navy vs sky) so elderly users can tell
+ * every box apart.
+ */
 const tints = [
-  "bg-primary/70",
-  "bg-secondary",
-  "bg-gold/70",
-  "bg-success",
-  "bg-primary/45",
-  "bg-secondary/60",
-  "bg-gold/45",
-  "bg-success/60",
-  "bg-primary/60",
-  "bg-secondary/80",
-  "bg-gold/60",
-  "bg-success/80",
-  "bg-primary/35",
-  "bg-secondary/45",
-  "bg-gold/35",
-  "bg-success/45",
+  "bg-red-600",
+  "bg-blue-700",
+  "bg-yellow-400",
+  "bg-pink-500",
+  "bg-green-600",
+  "bg-orange-500",
+  "bg-purple-700",
+  "bg-teal-600",
+  "bg-rose-800",
+  "bg-sky-400",
+  "bg-amber-600",
+  "bg-fuchsia-400",
+  "bg-green-900",
+  "bg-lime-500",
+  "bg-indigo-500",
+  "bg-cyan-700",
 ];
 
 /** Level 1 starts with four boxes; each level adds more boxes to remember. */
@@ -154,7 +160,7 @@ function SequenceGame() {
                 disabled={phase !== "repeat"}
                 aria-label={`Box ${cell + 1}`}
                 className={`tap-press aspect-square rounded-2xl transition-opacity duration-300 ${tints[cell]} ${
-                  flash === cell ? "opacity-100 ring-4 ring-primary" : "opacity-55"
+                  flash === cell ? "opacity-100 ring-4 ring-white" : "opacity-70"
                 }`}
               />
             ))}

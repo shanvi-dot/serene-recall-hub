@@ -3,7 +3,7 @@ import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
+
 import { toast } from "sonner";
 import { useSession } from "@/lib/session";
 import { supabase } from "@/integrations/supabase/client";
@@ -26,7 +26,7 @@ function SignUpScreen() {
   const navigate = useNavigate();
   const { completeAuth } = useSession();
   const [step, setStep] = useState<1 | 2>(1);
-  const [agreed, setAgreed] = useState(false);
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [caregiverName, setCaregiverName] = useState("");
@@ -37,10 +37,6 @@ function SignUpScreen() {
 
   async function handleStepOne(e: FormEvent) {
     e.preventDefault();
-    if (!agreed) {
-      toast.error("Please accept the Terms & Privacy Policy.");
-      return;
-    }
     setSubmitting(true);
     const { error } = await supabase.auth.signUp({ email, password });
     setSubmitting(false);
@@ -93,10 +89,6 @@ function SignUpScreen() {
               <Label htmlFor="new-password" className="text-base">Password</Label>
               <Input id="new-password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="min-h-14 rounded-2xl bg-card text-base" />
             </div>
-            <Label htmlFor="terms" className="flex items-start gap-3 rounded-2xl bg-muted/60 p-4 text-base leading-relaxed">
-              <Checkbox id="terms" checked={agreed} onCheckedChange={(v) => setAgreed(v === true)} className="mt-1 size-6" />
-              <span>I agree to the Terms of Service and Privacy Policy.</span>
-            </Label>
             <Button type="submit" variant="gold" size="care" className="w-full font-bold" disabled={submitting}>
               {submitting ? "Creating account…" : "Continue"}
             </Button>
