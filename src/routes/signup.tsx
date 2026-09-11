@@ -3,7 +3,7 @@ import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
+
 import { toast } from "sonner";
 import { useSession } from "@/lib/session";
 import { supabase } from "@/integrations/supabase/client";
@@ -26,7 +26,7 @@ function SignUpScreen() {
   const navigate = useNavigate();
   const { completeAuth } = useSession();
   const [step, setStep] = useState<1 | 2>(1);
-  const [agreed, setAgreed] = useState(false);
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [caregiverName, setCaregiverName] = useState("");
