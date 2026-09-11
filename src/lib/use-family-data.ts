@@ -53,9 +53,9 @@ export function useFamilyData(): FamilyData {
         console.error("Error fetching caregiver row:", caregiverError);
       }
 
-      if (!caregiverRow) {
+      if (!caregiverRow || !caregiverRow.family_id) {
         console.warn(
-          "No caregiver row is linked to auth user " +
+          "No caregiver row (with a family_id) is linked to auth user " +
             user.id +
             ". This means create_family_account() never ran successfully for this login " +
             "(most commonly: the account was created while email confirmation was still pending). " +
@@ -67,10 +67,12 @@ export function useFamilyData(): FamilyData {
         return;
       }
 
+      const familyId: string = caregiverRow.family_id;
+
       const { data: patientRow, error: patientError } = await supabase
         .from("patients")
         .select("id, name")
-        .eq("family_id", caregiverRow.family_id)
+        .eq("family_id", familyId)
         .maybeSingle();
 
       if (patientError) {
@@ -84,7 +86,7 @@ export function useFamilyData(): FamilyData {
           patientName: patientRow?.name ?? null,
           caregiverId: caregiverRow.id,
           caregiverName: caregiverRow.name,
-          familyId: caregiverRow.family_id,
+          familyId,
           error: patientRow ? null : "No patient found for this family.",
         });
       }

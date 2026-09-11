@@ -53,7 +53,7 @@ function Dashboard() {
       if (reminderRows && reminderRows.length > 0) {
         const now = new Date().toTimeString().slice(0, 8);
         const upcoming = reminderRows.find((r) => r.scheduled_time > now);
-        setNextReminder(upcoming ?? reminderRows[0]);
+        setNextReminder(upcoming ?? reminderRows[0]!);
       }
 
       setLoadingExtras(false);
