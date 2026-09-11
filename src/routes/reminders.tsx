@@ -32,7 +32,7 @@ export const Route = createFileRoute("/reminders")({
 });
 
 function RemindersScreen() {
-  const { role, hydrated } = useSession();
+  const { view, hydrated } = useSession();
   const [on, setOn] = useState(true);
   const [items, setItems] = useState(seed);
   const [adding, setAdding] = useState(false);
@@ -40,14 +40,14 @@ function RemindersScreen() {
   // Reminder state is stored per account, so patient and caregiver never mix.
   useEffect(() => {
     if (!hydrated) return;
-    const raw = window.localStorage.getItem(scopeKey(role, "reminders"));
+    const raw = window.localStorage.getItem(scopeKey(view, "reminders"));
     setItems(raw ? (JSON.parse(raw) as typeof seed) : seed);
-  }, [role, hydrated]);
+  }, [view, hydrated]);
 
   useEffect(() => {
     if (!hydrated) return;
-    window.localStorage.setItem(scopeKey(role, "reminders"), JSON.stringify(items));
-  }, [items, role, hydrated]);
+    window.localStorage.setItem(scopeKey(view, "reminders"), JSON.stringify(items));
+  }, [items, view, hydrated]);
 
   return (
     <MobileShell>

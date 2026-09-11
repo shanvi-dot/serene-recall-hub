@@ -1,7 +1,7 @@
 import { Link, useRouter, useRouterState } from "@tanstack/react-router";
 import { Home, Gamepad2, BookHeart, Bell, User, ArrowLeft, HeartHandshake } from "lucide-react";
 import type { ReactNode } from "react";
-import { useHome, useSession } from "@/lib/session";
+import { useSession } from "@/lib/session";
 
 const patientTabs = [
   { to: "/dashboard", label: "Home", icon: Home },
@@ -21,8 +21,8 @@ const caregiverTabs = [
 
 export function MobileShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const { role } = useSession();
-  const tabs = role === "caregiver" ? caregiverTabs : patientTabs;
+  const { view } = useSession();
+  const tabs = view === "caregiver" ? caregiverTabs : patientTabs;
 
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background">
@@ -62,7 +62,8 @@ export function MobileShell({ children }: { children: ReactNode }) {
 /** Goes back to the previous page in this account's history, never across accounts. */
 export function BackButton({ label = "Go back" }: { label?: string }) {
   const router = useRouter();
-  const home = useHome();
+  const { view } = useSession();
+  const home = view === "caregiver" ? "/caregiver" : "/dashboard";
 
   return (
     <button
