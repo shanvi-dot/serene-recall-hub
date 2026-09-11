@@ -14,13 +14,394 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      caregivers: {
+        Row: {
+          auth_user_id: string | null
+          created_at: string | null
+          family_id: string | null
+          id: string
+          name: string
+          pin_hash: string | null
+        }
+        Insert: {
+          auth_user_id?: string | null
+          created_at?: string | null
+          family_id?: string | null
+          id?: string
+          name: string
+          pin_hash?: string | null
+        }
+        Update: {
+          auth_user_id?: string | null
+          created_at?: string | null
+          family_id?: string | null
+          id?: string
+          name?: string
+          pin_hash?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "caregivers_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cultural_content: {
+        Row: {
+          category: string
+          description: string
+          display_date: string | null
+          id: string
+          image_url: string | null
+          state: string
+          title: string
+        }
+        Insert: {
+          category: string
+          description: string
+          display_date?: string | null
+          id?: string
+          image_url?: string | null
+          state: string
+          title: string
+        }
+        Update: {
+          category?: string
+          description?: string
+          display_date?: string | null
+          id?: string
+          image_url?: string | null
+          state?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      families: {
+        Row: {
+          created_at: string | null
+          id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
+      flashcard_likes: {
+        Row: {
+          cultural_content_id: string | null
+          family_id: string | null
+          id: string
+          liked_at: string | null
+        }
+        Insert: {
+          cultural_content_id?: string | null
+          family_id?: string | null
+          id?: string
+          liked_at?: string | null
+        }
+        Update: {
+          cultural_content_id?: string | null
+          family_id?: string | null
+          id?: string
+          liked_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "flashcard_likes_cultural_content_id_fkey"
+            columns: ["cultural_content_id"]
+            isOneToOne: false
+            referencedRelation: "cultural_content"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "flashcard_likes_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      game_sessions: {
+        Row: {
+          accuracy: number | null
+          created_at: string | null
+          difficulty_level: number | null
+          event_time: string
+          family_id: string | null
+          game_type: string
+          id: string
+          response_time_avg: number | null
+        }
+        Insert: {
+          accuracy?: number | null
+          created_at?: string | null
+          difficulty_level?: number | null
+          event_time?: string
+          family_id?: string | null
+          game_type: string
+          id?: string
+          response_time_avg?: number | null
+        }
+        Update: {
+          accuracy?: number | null
+          created_at?: string | null
+          difficulty_level?: number | null
+          event_time?: string
+          family_id?: string | null
+          game_type?: string
+          id?: string
+          response_time_avg?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "game_sessions_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      journal_entries: {
+        Row: {
+          author_name: string | null
+          authored_by: string
+          content: string
+          created_at: string | null
+          event_time: string
+          family_id: string | null
+          id: string
+          mood_emoji: string | null
+          quiz_eligible: boolean | null
+          used_in_quiz: boolean | null
+        }
+        Insert: {
+          author_name?: string | null
+          authored_by: string
+          content: string
+          created_at?: string | null
+          event_time?: string
+          family_id?: string | null
+          id?: string
+          mood_emoji?: string | null
+          quiz_eligible?: boolean | null
+          used_in_quiz?: boolean | null
+        }
+        Update: {
+          author_name?: string | null
+          authored_by?: string
+          content?: string
+          created_at?: string | null
+          event_time?: string
+          family_id?: string | null
+          id?: string
+          mood_emoji?: string | null
+          quiz_eligible?: boolean | null
+          used_in_quiz?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "journal_entries_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      patients: {
+        Row: {
+          created_at: string | null
+          family_id: string | null
+          id: string
+          name: string
+          preferred_language: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          family_id?: string | null
+          id?: string
+          name: string
+          preferred_language?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          family_id?: string | null
+          id?: string
+          name?: string
+          preferred_language?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "patients_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quiz_prompts: {
+        Row: {
+          answered: boolean | null
+          correct_answer: string
+          created_at: string | null
+          family_id: string | null
+          id: string
+          question: string
+          scheduled_date: string
+          source_journal_id: string | null
+          was_correct: boolean | null
+          wrong_options: string[] | null
+        }
+        Insert: {
+          answered?: boolean | null
+          correct_answer: string
+          created_at?: string | null
+          family_id?: string | null
+          id?: string
+          question: string
+          scheduled_date: string
+          source_journal_id?: string | null
+          was_correct?: boolean | null
+          wrong_options?: string[] | null
+        }
+        Update: {
+          answered?: boolean | null
+          correct_answer?: string
+          created_at?: string | null
+          family_id?: string | null
+          id?: string
+          question?: string
+          scheduled_date?: string
+          source_journal_id?: string | null
+          was_correct?: boolean | null
+          wrong_options?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quiz_prompts_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quiz_prompts_source_journal_id_fkey"
+            columns: ["source_journal_id"]
+            isOneToOne: false
+            referencedRelation: "journal_entries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reminder_logs: {
+        Row: {
+          completed_at: string | null
+          event_time: string
+          family_id: string | null
+          id: string
+          reminder_id: string | null
+          was_completed: boolean | null
+        }
+        Insert: {
+          completed_at?: string | null
+          event_time?: string
+          family_id?: string | null
+          id?: string
+          reminder_id?: string | null
+          was_completed?: boolean | null
+        }
+        Update: {
+          completed_at?: string | null
+          event_time?: string
+          family_id?: string | null
+          id?: string
+          reminder_id?: string | null
+          was_completed?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reminder_logs_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reminder_logs_reminder_id_fkey"
+            columns: ["reminder_id"]
+            isOneToOne: false
+            referencedRelation: "reminders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reminders: {
+        Row: {
+          created_at: string | null
+          family_id: string | null
+          id: string
+          label: string
+          recurrence: string | null
+          scheduled_time: string
+          type: string
+        }
+        Insert: {
+          created_at?: string | null
+          family_id?: string | null
+          id?: string
+          label: string
+          recurrence?: string | null
+          scheduled_time: string
+          type: string
+        }
+        Update: {
+          created_at?: string | null
+          family_id?: string | null
+          id?: string
+          label?: string
+          recurrence?: string | null
+          scheduled_time?: string
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reminders_family_id_fkey"
+            columns: ["family_id"]
+            isOneToOne: false
+            referencedRelation: "families"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      create_family_account: {
+        Args: {
+          p_caregiver_name: string
+          p_patient_name: string
+          p_pin_hash: string
+          p_relation: string
+        }
+        Returns: string
+      }
+      verify_caregiver_pin: {
+        Args: { p_family_id: string; p_pin: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
